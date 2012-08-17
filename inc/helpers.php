@@ -43,7 +43,7 @@ function proper_get_textarea_opts($txt) {
 function proper_display_errors($errs) {
 	$output = '
 	<div class="proper_error_box">
-		<h3>Please correct the following errors:</h3>
+		<h6>Please correct the following errors:</h6>
 		<ul>';
 	
 	foreach ($errs as $err) :

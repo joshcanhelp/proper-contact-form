@@ -1,4 +1,7 @@
 <?php
+
+// v 0.8.1
+
 class ThatFormBuilder {
 	
 	// Stores all form inputs
@@ -128,7 +131,7 @@ class ThatFormBuilder {
 	}
 	
 	// Parse the inputs and build the form HTML
-	function build_form() {
+	function build_form($echo = true) {
 	
 		$output = '
 		<form method="' . $this->form['method'] . '"';
@@ -235,7 +238,7 @@ class ThatFormBuilder {
 			// Build the label
 			if (!empty($label_html)) :
 				$field .= $label_html;
-			elseif ($val['add_label'] && $val['type'] != 'hidden' && $val['type'] != 'submit') :
+			elseif ($val['add_label'] && $val['type'] != 'hidden' && $val['type'] != 'submit' && $val['type'] != 'title') :
 				$val['label'] .= $val['required'] ? ' <strong>*</strong>' : '';
 				$field .= '
 					<label for="' . $val['id'] . '">' . $val['label'] . '</label>';
@@ -275,7 +278,8 @@ class ThatFormBuilder {
 		$output .= '
 		</form>';
 		
-		echo $output;
+		if ($echo) echo $output;
+		else return $output;
 		
 	}
 	
