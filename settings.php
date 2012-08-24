@@ -14,6 +14,49 @@
 global $plugin_options;
 $plugin_options = array(
 	array(
+		'Fields to show',
+		'',
+		'',
+		'title',
+		'',
+	),
+	array(
+		'Email address',
+		'propercfp_email_field',
+		'Should an email address field be displayed?',
+		'select',
+		'yes', 
+		array(
+			'yes' => 'Yes but not required',
+			'req' => 'Required'
+		),
+	),
+	array(
+		'Phone number',
+		'propercfp_phone_field',
+		'Should a phone number field be displayed?',
+		'select',
+		'yes',
+		array(
+			'yes' => 'Yes but not required',
+			'req' => 'Required'
+		),
+	),
+	array(
+		'"Reason for contacting" options',
+		'propercfp_reason',
+		'Enter the options for the "Reason for contacting" dropdown, each on their own line. Leave this blank to omit this option',
+		'textarea',
+		'',
+	),
+	array(
+		'Form processing options',
+		'',
+		'',
+		'title',
+		'',
+	),
+	array(
 		'Default contact submission email',
 		'propercfp_email',
 		'Email to use for the sender and receiver of the contact form',
@@ -30,29 +73,22 @@ $plugin_options = array(
 	array(
 		'"Thank You" URL',
 		'propercfp_result_url',
-		'Direct URL of the outcome page for all forms submitted',
+		'Select the post-submit page for all forms submitted',
 		'select',
 		'',
 		proper_get_content_array()
 	),
 	array(
-		'Ask for phone number',
-		'propercfp_phone',
-		'Should the standard contact form ask for a phone number?',
+		'Add styles to the site',
+		'propercfp_css',
+		'Checking this box will add styles to the form. By deafult, this is off so you can add your own styles.',
 		'checkbox',
 		'',
 	),
 	array(
-		'"Reason for contacting" options',
-		'propercfp_reason',
-		'Enter the options for the "Reason for contacting" dropdown, each on their own line. Leave this blank to omit this option',
-		'textarea',
-		'',
-	),
-	array(
-		'Add styles to the site',
-		'propercfp_css',
-		'Checking this box will add styles to the form. By deafult, this is off so you can add your own styles.',
+		'Store submissions in the database',
+		'propercfp_store',
+		'Should the submissions be stored in the admin area?',
 		'checkbox',
 		'',
 	),
@@ -162,10 +198,15 @@ function proper_contact_admin() {
 	<div class="wrap" id="proper-options-page">
 		
 		<h2>Proper Contact Settings</h2>
+		
+		<?php 
+		$doc_file = WP_PLUGIN_DIR . '/' . basename(dirname(__FILE__)) . '/inc/docs.html';
+		if (is_readable($doc_file)) echo file_get_contents($doc_file) 
+		?>
             
 		<form method="post">
 	
-			<table class="jch-form-table">	    
+			<table class="jch-form-table" cellpadding="0" cellspacing="0">	    
 			<?php 
 			foreach ($plugin_options as $value) :
 				
@@ -195,7 +236,7 @@ function proper_contact_admin() {
 				?>
 				
 				<tr>
-					<td style="padding: 10px; border-left: 1px solid #ddd" colspan="2">
+					<td style="padding: 20px 10px; border-bottom: 1px solid #f1f1f1" colspan="2">
 						<h4><?php echo $opt_name; ?>:</h4>
 						<p><?php echo $opt_desc ?></p>
 					</td>
@@ -208,10 +249,10 @@ function proper_contact_admin() {
 				} elseif ($opt_type == 'text' || $opt_type == 'url' || $opt_type == 'email') { 
 				?>
 				<tr>
-					<th style="text-align: left; padding: 10px" scope="row">
+					<th style="border-bottom: 1px solid #f1f1f1; text-align: left; padding: 10px" scope="row">
 						<label for="<?php echo $opt_id; ?>"><?php echo $opt_name; ?>:</label>
 					</th>
-					<td style="padding: 10px; border-left: 1px solid #ddd">
+					<td style="padding: 20px 10px; border-bottom: 1px solid #f1f1f1">
 						<?php echo $opt_desc ?><br >
 						<input size="60" onfocus="this.select();" name="<?php echo $opt_id; ?>" id="<?php echo $opt_id; ?>" type="<?php echo $opt_type ?>" value="<?php 
 							if ( isset($propercfp_options[$opt_id]) && !empty($propercfp_options[$opt_id])) { 
@@ -228,13 +269,13 @@ function proper_contact_admin() {
 				?>
                 
                 <tr>
-					<th style="text-align: left; padding: 10px" scope="row">
+					<th style="border-bottom: 1px solid #f1f1f1; text-align: left; padding: 10px" scope="row">
 						<label for="<?php echo $opt_id; ?>"><?php echo $opt_name; ?>:</label>
 					</th>
-					<td style="padding: 10px; border-left: 1px solid #ddd">
+					<td style="padding: 20px 10px; border-bottom: 1px solid #f1f1f1">
 						<?php echo $opt_desc; ?><br >
-						<select name="<?php echo $opt_id; ?>" id="<?php echo $opt_id; ?>">
-							<option value="">None</option>
+						<select name="<?php echo $opt_id; ?>" id="<?php echo $opt_id; ?>">	
+								<option value="">None</option>
                         <?php foreach ($opt_options as $key => $val) {?>
                         	<option value="<?php echo $key ?>" <?php 
 						if ( isset($propercfp_options[$opt_id]) && $propercfp_options[$opt_id] == $key) { 
@@ -252,10 +293,10 @@ function proper_contact_admin() {
 				?>
                 
                 <tr>
-					<th style="text-align: left; padding: 10px" scope="row">
+					<th style="border-bottom: 1px solid #f1f1f1; text-align: left; padding: 10px" scope="row">
 						<?php echo $opt_name; ?>:
 					</th>
-					<td style="padding: 10px; border-left: 1px solid #ddd">
+					<td style="padding: 20px 10px; border-bottom: 1px solid #f1f1f1">
 						<?php echo $opt_desc; ?><br >
                         <?php foreach ($opt_options as $val) {?>
                         
@@ -268,10 +309,10 @@ function proper_contact_admin() {
                 <?php } elseif ($opt_type == 'checkbox') {?>
                 
                 <tr>
-					<th style="text-align: left; padding: 10px" scope="row">
+					<th style="border-bottom: 1px solid #f1f1f1; text-align: left; padding: 10px" scope="row">
 						<?php echo $opt_name; ?>:
 					</th>
-					<td style="padding: 10px; border-left: 1px solid #ddd">	
+					<td style="padding: 20px 10px; border-bottom: 1px solid #f1f1f1">	
 						<?php echo $opt_desc ?><br >
                         <input type="checkbox" value="yes" <?php if ( isset($propercfp_options[$opt_id]) && $propercfp_options[$opt_id] == 'yes' ) { echo 'checked';} ?> name="<?php echo $opt_id; ?>" id="<?php echo $opt_id; ?>">
                         <label for="<?php echo $opt_id; ?>">Yes</label><br >
@@ -283,18 +324,19 @@ function proper_contact_admin() {
 				// Displays correct inputs for "textarea" type
 				elseif ($opt_type == 'textarea') { ?>
 				<tr>
-					<th style="text-align: left; padding: 10px" scope="row">
+					<th style="border-bottom: 1px solid #f1f1f1; text-align: left; padding: 10px" scope="row">
 						<?php echo $opt_name; ?>:
 					</th>
-					<td style="padding: 10px; border-left: 1px solid #ddd">
+					<td style="padding: 20px 10px; border-bottom: 1px solid #f1f1f1">
+					<?php echo $opt_desc ?><br>
 						<textarea onfocus="this.select();" rows="6" cols="60" name="<?php echo $opt_id; ?>" id="<?php echo $opt_id; ?>" style="<?php echo $value['style']; ?>" type="<?php echo $opt_type; ?>" ><?php if ( isset($propercfp_options[$opt_id])) { echo stripslashes($propercfp_options[$opt_id]); }?></textarea>
 					</td>
 				</tr>
 				
 				<?php } elseif ($opt_type == 'title') {?>
 				<tr>
-                      <td style="padding: 10px;" colspan="2" class="header">
-                         <h2><?php  echo $opt_name ?></h2>
+                      <td style="padding: 20px 10px;" colspan="2" class="header">
+                         <h3 style="font-size: 1.6em"><?php  echo $opt_name ?></h3>
                        </td>
 				 </tr>
 				<?php  }?>

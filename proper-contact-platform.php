@@ -4,16 +4,19 @@
 Plugin Name: Proper Contact Platform
 Description: A better contact form processor
 Version: 0.9
-Author: This.Next
+Author: Proper Development
 License: GPL2
 */
+
+// Help functions
+require_once(WP_PLUGIN_DIR . '/' . basename(dirname(__FILE__)) . '/inc/helpers.php');
 
 function proper_contact_form($atts, $content = null) {
 	
 	if (isset($_SESSION['propercfp_sent']) && $_SESSION['propercfp_sent'] === 'yes') :
 		echo '
 		<div class="proper_contact_form_wrap">
-		<h2>'.proper_get_key('propercfp_label_submit').'</h2>
+			<h2>'.proper_get_key('propercfp_label_submit').'</h2>
 		</div>';
 		unset($_SESSION['propercfp_sent']);
 		return;
@@ -35,15 +38,21 @@ function proper_contact_form($atts, $content = null) {
 	), 'contact-name');
 	
 	// Required email field
-	$form->add_input(proper_get_key('propercfp_label_email'), array(
-		'required' => true,
-		'type' => 'email',
-		'wrap_class' => isset($_SESSION['cfp_contact_errors']['contact-email']) ? array('form_field_wrap', 'error') : array('form_field_wrap')
-	), 'contact-email');
+	if(proper_get_key('propercfp_email_field')) :
+		$required = proper_get_key('propercfp_email_field') === 'req' ? true : false;
+		$form->add_input(proper_get_key('propercfp_label_email'), array(
+			'required' => $required,
+			'type' => 'email',
+			'wrap_class' => isset($_SESSION['cfp_contact_errors']['contact-email']) ? array('form_field_wrap', 'error') : array('form_field_wrap')
+		), 'contact-email');
+	endif;
 	
 	// Add phone field if selected on the settings page
-	if(proper_get_key('propercfp_phone') === 'yes') :
-			$form->add_input(proper_get_key('propercfp_label_phone'), array(), 'contact-phone');
+	if(proper_get_key('propercfp_phone_field')) :
+		$required = proper_get_key('propercfp_phone_field') === 'req' ? true : false;
+		$form->add_input(proper_get_key('propercfp_label_phone'), array(
+			'required' => $required
+		), 'contact-phone');
 	endif;
 	
 	// Add reasons drop-down
@@ -130,7 +139,7 @@ function cfp_process_contact() {
 	
 	// Sanitize and validate email
 	$contact_email = sanitize_email($_POST['contact-email']);
-	if (! filter_var($contact_email, FILTER_VALIDATE_EMAIL) ) 
+	if (proper_get_key('propercfp_email_field') === 'req' && ! filter_var($contact_email, FILTER_VALIDATE_EMAIL) ) 
 		$_SESSION['cfp_contact_errors']['contact-email'] = 'Enter a valid email';
 	else 
 		$body .= "
@@ -138,7 +147,9 @@ function cfp_process_contact() {
 	
 	// Sanitize phone number
 	$contact_phone = isset($_POST['contact-phone']) ? sanitize_text_field($_POST['contact-phone']) : '';
-	if (!empty($contact_phone)) 
+	if (proper_get_key('propercfp_phone_field') === 'req' && empty($contact_phone) ) 
+		$_SESSION['cfp_contact_errors']['contact-phone'] = 'Please enter a phone number';
+	elseif (!empty($contact_phone)) 
 		$body .= "
 	Phone: $contact_phone\n";
 		
@@ -160,7 +171,7 @@ function cfp_process_contact() {
 	$contact_ip = filter_var($_POST['contact-ip'], FILTER_VALIDATE_IP);
 	if (!empty($contact_ip)) 
 		$body .= "
-	IP address: $contact_ip (http://whois.domaintools.com/$contact_ip, http://whatismyipaddress.com/ip/$contact_ip)\n";
+	IP address: $contact_ip (more info at http://whois.domaintools.com/$contact_ip or http://whatismyipaddress.com/ip/$contact_ip)\n";
 	
 	// Sanitize and prepare referrer
 	$contact_referrer = sanitize_text_field($_POST['contact-referrer']);
@@ -178,6 +189,25 @@ function cfp_process_contact() {
 		
 		wp_mail($site_email, 'Contact on ' . $site_name, $body);
 		
+		// Should a confirm email be sent? 
+		$confirm_body = trim(proper_get_key('propercfp_confirm_email'));
+		if (!empty($body)) :
+			$headers = "From: $site_name <$site_email>\r\n";
+			wp_mail($contact_email, 'Your contact on ' . get_bloginfo('name'), $confirm_body, $headers);
+		endif;
+		
+		// Should the entry be stored in the DB?
+		if (proper_get_key('propercfp_store') === 'yes') :
+			wp_insert_post(array(
+				'post_type' => 'proper_contact',
+				'post_title' => date('l, M j, Y', time()) . ' by "' . $contact_name . '"',
+				'post_content' => $body,
+				'post_author' => 1,
+				'post_status' => 'private'
+			));
+		endif;
+		
+		// Should the user get redirected?
 		if(proper_get_key('propercfp_result_url')) : 
 			$redirect_id = proper_get_key('propercfp_result_url');
 			$redirect = get_permalink($redirect_id);
@@ -186,20 +216,10 @@ function cfp_process_contact() {
 			$_SESSION['propercfp_sent'] = 'yes';
 		endif;
 		
-		$body = trim(proper_get_key('propercfp_confirm_email'));
-		if (!empty($body)) :
-			$headers = "From: $site_name <$site_email>\r\n";
-			wp_mail($contact_email, 'Your contact on ' . get_bloginfo('name'), $body, $headers);
-		endif;
-		
 	endif;
 	
 }
 add_action('template_redirect', 'cfp_process_contact');
-
-
-// Help functions
-include('inc/helpers.php');
 
 
 // Custom plugin settings
@@ -216,22 +236,6 @@ function proper_get_key($id) {
 }
 endif;
 
-/*
-Add JS validation
-:FIXIT:
-*/
-if (proper_get_key('propercfp_js') === 'yes') : 
-
-	function proper_contact_scripts() {
-	
-		wp_register_script( 'common_scripts', get_bloginfo('template_url') . '/js/scripts.js', array('jquery'), false, true);
-		wp_enqueue_script( 'common_scripts' );
-		
-	}    
-	 
-	add_action('wp_enqueue_scripts', 'proper_contact_scripts');
-	
-endif;
 
 /*
 Add CSS
@@ -243,3 +247,42 @@ function proper_contact_styles() {
 	
 if (proper_get_key('propercfp_css') === 'yes') 
 	add_action('wp_enqueue_scripts', 'proper_contact_styles');
+	
+	
+/*
+Store submissions in the DB
+*/
+
+function proper_contact_content_type() {
+  $labels = array(
+    'name' => _x('Contacts', 'post type general name'),
+    'singular_name' => _x('Contact', 'post type singular name'),
+    'add_new' => _x('Add Contact', 'proper_contact'),
+    'add_new_item' => __('Add New Contact'),
+    'edit_item' => __('Edit Contact'),
+    'new_item' => __('New Contact'),
+    'all_items' => __('All Contacts'),
+    'view_item' => __('View Contact'),
+    'not_found' =>  __('No Contacts found'),
+    'not_found_in_trash' => __('No Contacts found in Trash'), 
+    'parent_item_colon' => '',
+    'menu_name' => 'Contacts'
+
+  );
+  $args = array(
+    'labels' => $labels,
+    'public' => false,
+    'publicly_queryable' => false,
+    'show_ui' => true, 
+    'show_in_menu' => true,
+    'has_archive' => 'string',
+    'hierarchical' => false,
+		'menu_position' => 26,
+		'menu_icon' => plugin_dir_url(__FILE__) . '/images/person.png',
+    'supports' => array( 'title', 'editor')
+  ); 
+  register_post_type('proper_contact',$args);
+}
+
+if (proper_get_key('propercfp_store') === 'yes') 
+	add_action( 'init', 'proper_contact_content_type' );
