@@ -279,7 +279,7 @@ function proper_contact_content_type() {
     'show_in_menu' => true,
     'has_archive' => 'string',
     'hierarchical' => false,
-		'menu_position' => 26,
+		'menu_position' => 27,
 		'menu_icon' => plugin_dir_url(__FILE__) . '/images/person.png',
     'supports' => array( 'title', 'editor', 'custom-fields')
   ); 
