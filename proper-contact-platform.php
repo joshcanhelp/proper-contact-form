@@ -127,7 +127,7 @@ function cfp_process_contact() {
 		$_SESSION['cfp_contact_errors']['honeypot'] = 'No spam please!';
 	
 	$body = "
-	*** Contact form submission on " . get_bloginfo('name') . " (" . site_url() . ")\n\n";
+*** Contact form submission on " . get_bloginfo('name') . " (" . site_url() . ")\n\n";
 	
 	// Sanitize and validate name
 	$contact_name = sanitize_text_field(trim($_POST['contact-name']));
@@ -135,15 +135,16 @@ function cfp_process_contact() {
 		$_SESSION['cfp_contact_errors']['contact-name'] = 'Enter your name';
 	else 
 		$body .= "
-	Name: $contact_name\n";
+Name: $contact_name\n";
 	
 	// Sanitize and validate email
 	$contact_email = sanitize_email($_POST['contact-email']);
 	if (proper_get_key('propercfp_email_field') === 'req' && ! filter_var($contact_email, FILTER_VALIDATE_EMAIL) ) 
 		$_SESSION['cfp_contact_errors']['contact-email'] = 'Enter a valid email';
-	else 
+	elseif (!empty($contact_email)) 
 		$body .= "
-	Email: $contact_email\nEmail search: https://www.google.com/#q=$contact_email\n";
+Email: $contact_email\r
+Email search: https://www.google.com/#q=$contact_email\n";
 	
 	// Sanitize phone number
 	$contact_phone = isset($_POST['contact-phone']) ? sanitize_text_field($_POST['contact-phone']) : '';
@@ -151,13 +152,13 @@ function cfp_process_contact() {
 		$_SESSION['cfp_contact_errors']['contact-phone'] = 'Please enter a phone number';
 	elseif (!empty($contact_phone)) 
 		$body .= "
-	Phone: $contact_phone\n";
+Phone: $contact_phone\n";
 		
 	// Sanitize contact reason
 	$contact_reason = isset($_POST['contact-reasons']) ? sanitize_text_field($_POST['contact-reasons']) : '';
 	if (!empty($contact_reason)) 
 		$body .= "
-	Reason for contact: $contact_reason\n";
+Reason for contact: $contact_reason\n";
 	
 	// Sanitize and validate comments
 	$contact_comment = sanitize_text_field(trim($_POST['question-or-comment']));
@@ -165,22 +166,24 @@ function cfp_process_contact() {
 		$_SESSION['cfp_contact_errors']['question-or-comment'] = 'Enter your question or comment';
 	else 
 		$body .= "
-	Comment/question: $contact_comment\n";
+Comment/question: $contact_comment\n";
 	
 	// Sanitize and validate IP
 	$contact_ip = filter_var($_POST['contact-ip'], FILTER_VALIDATE_IP);
 	if (!empty($contact_ip)) 
 		$body .= "
-	IP address: $contact_ip \nIP search: http://whois.domaintools.com/$contact_ip \nIP search: http://whatismyipaddress.com/ip/$contact_ip)\n";
+IP address: $contact_ip \r
+IP search: http://whois.domaintools.com/$contact_ip \r
+IP search: http://whatismyipaddress.com/ip/$contact_ip)\n";
 	
 	// Sanitize and prepare referrer
 	$contact_referrer = sanitize_text_field($_POST['contact-referrer']);
 	if (!empty($contact_referrer)) 
 		$body .= "
-	Came from: $contact_referrer\n";
+Came from: $contact_referrer\n";
 	
 	$body .= '
-	Sent from page: ' . get_permalink(get_the_id());
+Sent from page: ' . get_permalink(get_the_id());
 	
 	if (empty($_SESSION['cfp_contact_errors'])) :
 
