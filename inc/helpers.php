@@ -5,8 +5,10 @@ function proper_get_content_array($type = 'page') {
 	$content = array();
 
 	$items = get_posts(array(
-		'post_type' => $type
+		'post_type' => $type,
+		'numberposts'     => -1
 	));
+	
 	
 	if (!empty($items)) :
 		foreach ($items as $item) :
