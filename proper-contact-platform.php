@@ -13,11 +13,9 @@ require_once(WP_PLUGIN_DIR . '/' . basename(dirname(__FILE__)) . '/inc/helpers.p
 
 function proper_contact_form($atts, $content = null) {
 	
-	$output = '';
-	
 	if (isset($_SESSION['propercfp_sent']) && $_SESSION['propercfp_sent'] === 'yes') :
 		unset($_SESSION['propercfp_sent']);
-		$output .= '
+		$output = '
 		<div class="proper_contact_form_wrap">
 			<h2>'.proper_get_key('propercfp_label_submit').'</h2>
 		</div>';
@@ -101,7 +99,7 @@ function proper_contact_form($atts, $content = null) {
 		unset($_SESSION['cfp_contact_errors']);
 	endif;
 	
-	$output .= '
+	$output = '
 	<div class="proper_contact_form_wrap">
 	' . $errors . $form->build_form(false) . '
 	</div>';
