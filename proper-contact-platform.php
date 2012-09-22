@@ -15,7 +15,7 @@ function proper_contact_form($atts, $content = null) {
 	
 	if (isset($_SESSION['propercfp_sent']) && $_SESSION['propercfp_sent'] === 'yes') :
 		unset($_SESSION['propercfp_sent']);
-		$output = '
+		return '
 		<div class="proper_contact_form_wrap">
 			<h2>'.proper_get_key('propercfp_label_submit').'</h2>
 		</div>';
@@ -99,12 +99,10 @@ function proper_contact_form($atts, $content = null) {
 		unset($_SESSION['cfp_contact_errors']);
 	endif;
 	
-	$output = '
+	return '
 	<div class="proper_contact_form_wrap">
 	' . $errors . $form->build_form(false) . '
 	</div>';
-	
-	return $output;
 	
 }
 add_shortcode( 'proper_contact_form', 'proper_contact_form' );
