@@ -64,13 +64,6 @@ $plugin_options = array(
 		get_bloginfo('admin_email')
 	),
 	array(
-		'Store contacts in the database',
-		'propercfp_store',
-		'Should contact form submissions be stored in the database?',
-		'checkbox',
-		'',
-	),
-	array(
 		'"Thank You" URL',
 		'propercfp_result_url',
 		'Select the post-submit page for all forms submitted',

@@ -1,7 +1,7 @@
 Proper Contact Platform
 ================= 
 
-A well-coded, secure, and (soon to be) flexible WordPress plugin that makes creating contact (and other) forms very simple. This is meant to be a simple tool for both savvy WordPress users and seasoned WordPress developers. 
+A well-coded, secure, and (soon to be very) flexible WordPress plugin that makes creating contact (and other) forms very simple. This is meant to be a simple tool for both savvy WordPress users and seasoned WordPress developers. 
 
 At the moment, this simply creates a contact form with the shortcode [proper_contact_form]. There is a settings page to tinker with a few of the options, and allows you to validate and submit to a new page to help with goal tracking in analytics.
 

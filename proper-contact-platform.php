@@ -72,7 +72,7 @@ function proper_contact_form($atts, $content = null) {
 		'required' => true,
 		'type' => 'textarea',
 		'wrap_class' => isset($_SESSION['cfp_contact_errors']['question-or-comment']) ? array('form_field_wrap', 'error') : array('form_field_wrap')
-	));
+	), 'question-or-comment');
 	
 	// IP Address
 	$form->add_input('Contact IP', array(
@@ -143,7 +143,7 @@ function cfp_process_contact() {
 		$_SESSION['cfp_contact_errors']['contact-email'] = 'Enter a valid email';
 	else 
 		$body .= "
-	Email: $contact_email\n";
+	Email: $contact_email\nEmail search: https://www.google.com/#q=$contact_email\n";
 	
 	// Sanitize phone number
 	$contact_phone = isset($_POST['contact-phone']) ? sanitize_text_field($_POST['contact-phone']) : '';
@@ -154,7 +154,7 @@ function cfp_process_contact() {
 	Phone: $contact_phone\n";
 		
 	// Sanitize contact reason
-	$contact_reason = isset($_POST['contact-reason']) ? sanitize_text_field($_POST['contact-reason']) : '';
+	$contact_reason = isset($_POST['contact-reasons']) ? sanitize_text_field($_POST['contact-reasons']) : '';
 	if (!empty($contact_reason)) 
 		$body .= "
 	Reason for contact: $contact_reason\n";
@@ -171,7 +171,7 @@ function cfp_process_contact() {
 	$contact_ip = filter_var($_POST['contact-ip'], FILTER_VALIDATE_IP);
 	if (!empty($contact_ip)) 
 		$body .= "
-	IP address: $contact_ip (more info at http://whois.domaintools.com/$contact_ip or http://whatismyipaddress.com/ip/$contact_ip)\n";
+	IP address: $contact_ip \nIP search: http://whois.domaintools.com/$contact_ip \nIP search: http://whatismyipaddress.com/ip/$contact_ip)\n";
 	
 	// Sanitize and prepare referrer
 	$contact_referrer = sanitize_text_field($_POST['contact-referrer']);
@@ -190,7 +190,7 @@ function cfp_process_contact() {
 		wp_mail($site_email, 'Contact on ' . $site_name, $body);
 		
 		// Should a confirm email be sent? 
-		$confirm_body = trim(proper_get_key('propercfp_confirm_email'));
+		$confirm_body = stripslashes(trim(proper_get_key('propercfp_confirm_email')));
 		if (!empty($body)) :
 			$headers = "From: $site_name <$site_email>\r\n";
 			wp_mail($contact_email, 'Your contact on ' . get_bloginfo('name'), $confirm_body, $headers);
@@ -198,13 +198,14 @@ function cfp_process_contact() {
 		
 		// Should the entry be stored in the DB?
 		if (proper_get_key('propercfp_store') === 'yes') :
-			wp_insert_post(array(
+			$new_post_id = wp_insert_post(array(
 				'post_type' => 'proper_contact',
 				'post_title' => date('l, M j, Y', time()) . ' by "' . $contact_name . '"',
 				'post_content' => $body,
 				'post_author' => 1,
 				'post_status' => 'private'
 			));
+			if (isset($contact_email) && !empty($contact_email)) add_post_meta($new_post_id, 'Contact email', $contact_email);
 		endif;
 		
 		// Should the user get redirected?
@@ -279,10 +280,12 @@ function proper_contact_content_type() {
     'hierarchical' => false,
 		'menu_position' => 26,
 		'menu_icon' => plugin_dir_url(__FILE__) . '/images/person.png',
-    'supports' => array( 'title', 'editor')
+    'supports' => array( 'title', 'editor', 'custom-fields')
   ); 
   register_post_type('proper_contact',$args);
 }
 
 if (proper_get_key('propercfp_store') === 'yes') 
 	add_action( 'init', 'proper_contact_content_type' );
+	
+	
