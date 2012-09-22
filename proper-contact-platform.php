@@ -13,13 +13,14 @@ require_once(WP_PLUGIN_DIR . '/' . basename(dirname(__FILE__)) . '/inc/helpers.p
 
 function proper_contact_form($atts, $content = null) {
 	
+	$output = '';
+	
 	if (isset($_SESSION['propercfp_sent']) && $_SESSION['propercfp_sent'] === 'yes') :
-		echo '
+		unset($_SESSION['propercfp_sent']);
+		$output .= '
 		<div class="proper_contact_form_wrap">
 			<h2>'.proper_get_key('propercfp_label_submit').'</h2>
 		</div>';
-		unset($_SESSION['propercfp_sent']);
-		return;
 	endif;
 	
 	// FormBuilder
@@ -94,17 +95,18 @@ function proper_contact_form($atts, $content = null) {
 		));
 	endif;
 	
-	echo '
-	<div class="proper_contact_form_wrap">';
-	
+	$errors = '';
 	if (isset($_SESSION['cfp_contact_errors']) && !empty($_SESSION['cfp_contact_errors'])) :
-		echo proper_display_errors($_SESSION['cfp_contact_errors']);
+		$errors = proper_display_errors($_SESSION['cfp_contact_errors']);
 		unset($_SESSION['cfp_contact_errors']);
 	endif;
 	
-	$form->build_form();
-	echo '
+	$output .= '
+	<div class="proper_contact_form_wrap">
+	' . $errors . $form->build_form(false) . '
 	</div>';
+	
+	return $output;
 	
 }
 add_shortcode( 'proper_contact_form', 'proper_contact_form' );
