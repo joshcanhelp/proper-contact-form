@@ -343,11 +343,6 @@ function proper_contact_admin() {
 			 <p class="submit">
 			 <input name="save" type="submit" value="Save changes" class="button-primary">
 			 <input type="hidden" name="action" value="save" >
-			 <?php if (isset($propercfp_options['last-panel'])) : ?>
-			 <input type="hidden" id="jch-show-panel" name="panel" value="<?php echo $propercfp_options['last-panel'] ?>" >
-			 <?php else : ?>
-			 <input type="hidden" id="jch-show-panel" name="panel" value="header" >
-			 <?php endif; ?>
 			</p>
 		  </form>
 	
@@ -367,7 +362,7 @@ function jch_settings_init() {
 		
 		foreach ($plugin_options as $opt) {
 				
-			$propercfp_options[$opt[1]] = $opt[4];
+			$propercfp_options[$opt[1]] = $opt[3];
 			
 		}
 			
