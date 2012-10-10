@@ -188,8 +188,8 @@ Sent from page: ' . get_permalink(get_the_id());
 		$site_email = proper_get_key('propercfp_email');
 		$site_name = get_bloginfo('name');
 		
-		$headers[] = 'From: $contact_name <$contact_email>';
-		$headers[] = 'Reply-To: $contact_email';
+		$headers[] = "From: $contact_name <$contact_email>";
+		$headers[] = "Reply-To: $contact_email";
 		$headers[] = 'X-Mailer: PHP/' . phpversion();
 		
 		wp_mail($site_email, 'Contact on ' . $site_name, $body, $headers);
@@ -197,8 +197,8 @@ Sent from page: ' . get_permalink(get_the_id());
 		// Should a confirm email be sent? 
 		$confirm_body = stripslashes(trim(proper_get_key('propercfp_confirm_email')));
 		if (!empty($confirm_body)) :
-			$headers[] = 'From: $site_name <$site_email>';
-			$headers[] = 'Reply-To: $site_email';
+			$headers[] = "From: $site_name <$site_email>";
+			$headers[] = "Reply-To: $site_email";
 			$headers[] = 'X-Mailer: PHP/' . phpversion();
 			wp_mail($contact_email, 'Your contact on ' . get_bloginfo('name'), $confirm_body, $headers);
 		endif;
