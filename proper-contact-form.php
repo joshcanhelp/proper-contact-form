@@ -1,7 +1,7 @@
 <?php 
 
 /*
-Plugin Name: Proper Contact Platform
+Plugin Name: Proper Contact Form
 Description: A better contact form processor
 Version: 0.9
 Author: Proper Development
@@ -153,10 +153,10 @@ Email search: https://www.google.com/#q=$contact_email\n";
 Phone: $contact_phone\n";
 		
 	// Sanitize contact reason
-	$contact_reason = isset($_POST['contact-reasons']) ? sanitize_text_field($_POST['contact-reasons']) : '';
+	$contact_reason = isset($_POST['contact-reasons']) ? wp_kses($_POST['contact-reasons']) : '';
 	if (!empty($contact_reason)) 
 		$body .= "
-Reason for contact: $contact_reason\n";
+Reason for contacting: $contact_reason\n";
 	
 	// Sanitize and validate comments
 	$contact_comment = sanitize_text_field(trim($_POST['question-or-comment']));
@@ -164,7 +164,7 @@ Reason for contact: $contact_reason\n";
 		$_SESSION['cfp_contact_errors']['question-or-comment'] = 'Enter your question or comment';
 	else 
 		$body .= "
-Comment/question: $contact_comment\n";
+Comment/question: " . stripslashes($contact_comment) . "\n";
 	
 	// Sanitize and validate IP
 	$contact_ip = filter_var($_POST['contact-ip'], FILTER_VALIDATE_IP);
@@ -188,12 +188,18 @@ Sent from page: ' . get_permalink(get_the_id());
 		$site_email = proper_get_key('propercfp_email');
 		$site_name = get_bloginfo('name');
 		
-		wp_mail($site_email, 'Contact on ' . $site_name, $body);
+		$headers[] = 'From: $contact_name <$contact_email>';
+		$headers[] = 'Reply-To: $contact_email';
+		$headers[] = 'X-Mailer: PHP/' . phpversion();
+		
+		wp_mail($site_email, 'Contact on ' . $site_name, $body, $headers);
 		
 		// Should a confirm email be sent? 
 		$confirm_body = stripslashes(trim(proper_get_key('propercfp_confirm_email')));
-		if (!empty($body)) :
-			$headers = "From: $site_name <$site_email>\r\n";
+		if (!empty($confirm_body)) :
+			$headers[] = 'From: $site_name <$site_email>';
+			$headers[] = 'Reply-To: $site_email';
+			$headers[] = 'X-Mailer: PHP/' . phpversion();
 			wp_mail($contact_email, 'Your contact on ' . get_bloginfo('name'), $confirm_body, $headers);
 		endif;
 		
@@ -234,7 +240,7 @@ if (! function_exists('proper_get_key')) :
 function proper_get_key($id) {
 	global $propercfp_options;
 	if (isset($propercfp_options[$id])) return $propercfp_options[$id];
-	else return false;
+	else return '';
 }
 endif;
 
