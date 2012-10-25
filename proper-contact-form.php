@@ -153,7 +153,7 @@ Email search: https://www.google.com/#q=$contact_email\n";
 Phone: $contact_phone\n";
 		
 	// Sanitize contact reason
-	$contact_reason = isset($_POST['contact-reasons']) ? wp_kses($_POST['contact-reasons']) : '';
+	$contact_reason = isset($_POST['contact-reasons']) ? strip_tags($_POST['contact-reasons']) : '';
 	if (!empty($contact_reason)) 
 		$body .= "
 Reason for contacting: $contact_reason\n";
