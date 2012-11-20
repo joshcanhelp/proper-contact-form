@@ -27,6 +27,7 @@ $plugin_options = array(
 		'select',
 		'yes', 
 		array(
+			'' => 'None',
 			'yes' => 'Yes but not required',
 			'req' => 'Required'
 		),
@@ -38,6 +39,7 @@ $plugin_options = array(
 		'select',
 		'yes',
 		array(
+			'' => 'None',
 			'yes' => 'Yes but not required',
 			'req' => 'Required'
 		),
@@ -177,200 +179,272 @@ function cfp_add_admin() {
 
 add_action('admin_menu' , 'cfp_add_admin');
 
+
+
 function proper_contact_admin() {
 
     global $plugin_options, $propercfp_options;
-
-    if ( isset($_REQUEST['saved']) && $_REQUEST['saved'] ) 
-			echo '<div id="message" class="updated fade"><p><strong>'.__('Settings saved.','thematic').'</strong></p></div>';
-			
-		elseif ( isset($_REQUEST['reset']) && $_REQUEST['reset'] ) 
-			echo '<div id="message" class="updated fade"><p><strong>'.__('Settings reset.','thematic').'</strong></p></div>';
-	
-	?>
-	<div class="wrap" id="proper-options-page">
-		
-		<h2>Proper Contact Settings</h2>
-		
-		<?php 
-		$doc_file = WP_PLUGIN_DIR . '/' . basename(dirname(__FILE__)) . '/inc/docs.html';
-		if (is_readable($doc_file)) echo file_get_contents($doc_file) 
 		?>
-            
-		<form method="post">
 	
-			<table class="jch-form-table" cellpadding="0" cellspacing="0">	    
+		<div class="wrap" id="proper-contact-options">
+			<h1>Proper Contact Form Settings</h1>
+			
+			<?php 
+			$doc_file = WP_PLUGIN_DIR . '/' . basename(dirname(__FILE__)) . '/inc/docs.html';
+			if (is_readable($doc_file)) echo file_get_contents($doc_file) 
+			?>
+		
+			<?php
+			// Show the "saved" message
+			if ( !empty($_REQUEST['saved']) ) : 
+			?>
+			
+				<div id="message" class="updated fade">
+					<p><strong>Proper Contact Form <?php echo  __('settings saved.','thematic') ?></strong></p>
+				</div>
+		
+			<?php endif ?>
+			
+			<form method="post">
+				<table cellpadding="0" cellspacing="0">
+
 			<?php 
 			foreach ($plugin_options as $value) :
 				
-				/*
-				Setting better variable names for clarity
-				*/
+				// More clear option names
 				
+				// Human-readable name
 				$opt_name = $value[0];
 				
+				// Machine name as ID
 				$opt_id = $value[1];
 				
+				// Description for this field, aka help text
 				$opt_desc = $value[2];
 				
+				// Input type, set to callback to use a function to build the input
 				$opt_type = $value[3];
 				
-				if (isset($value[4][0]) && $value[4][0] == '#')
-					$opt_default = substr($value[4], 1, 6);
-				else 
-					$opt_default = $value[4];
-				
-				if(isset($value[5])) $opt_options = $value[5];
-				
-				/*
-				Descriptive text in the theme settings
-				*/
-				if ($opt_type == 'description') { 
+				// Default vale
+				$opt_default = $value[4];
+			
+				// Value currently saved
+				$opt_val = isset($propercfp_options[$opt_id]) ? $propercfp_options[$opt_id] : $opt_default;
+	
+				// Options if checkbox, select, or radio
+				$opt_options = empty($value[5]) ? array() : $value[5];
+		
+				// Allow for blocks of HTML to be displayed within the settings form
+				if ($opt_type == 'html') :
 				?>
-				
-				<tr>
-					<td style="padding: 20px 10px; border-bottom: 1px solid #f1f1f1" colspan="2">
-						<h4><?php echo $opt_name; ?>:</h4>
-						<p><?php echo $opt_desc ?></p>
-					</td>
-				</tr>
-				
+					<tr>
+						<td colspan="2">
+							<h4><?php echo $opt_name ?></h4>
+							<p class="option_desc"><?php echo $opt_desc ?></p>
+						</td>
+					</tr>
 				<?php
-				/*
-				Text input
-				*/		
-				} elseif ($opt_type == 'text' || $opt_type == 'url' || $opt_type == 'email') { 
+				
+				// Allow titles to be added to deliniate sections
+				elseif ($opt_type == 'title') :
 				?>
-				<tr>
-					<th style="border-bottom: 1px solid #f1f1f1; text-align: left; padding: 10px" scope="row">
-						<label for="<?php echo $opt_id; ?>"><?php echo $opt_name; ?>:</label>
-					</th>
-					<td style="padding: 20px 10px; border-bottom: 1px solid #f1f1f1">
-						<?php echo $opt_desc ?><br >
-						<input size="60" onfocus="this.select();" name="<?php echo $opt_id; ?>" id="<?php echo $opt_id; ?>" type="<?php echo $opt_type ?>" value="<?php 
-							if ( isset($propercfp_options[$opt_id]) && !empty($propercfp_options[$opt_id])) { 
-								echo stripslashes($propercfp_options[$opt_id]); 
-							} else {
-								echo $opt_default;
-							}
-							?>" >
-					</td>
-				</tr>
-                <?php 
+				
+					<tr>
+						<td colspan="2" class="header">
+							<h3><?php  echo $opt_name ?></h3>
+						</td>
+					</tr>
+					
+				<?php  
+				
+				// Horizontal breaks
+				elseif ($opt_type == "break") : 
+				?>
+					
+					<tr><td colspan="2"><hr></td></tr>
+					
+				<?php
+			
+				// Displays correct inputs for "text" type			
+				elseif ($opt_type == 'text' || $opt_type == 'number' || $opt_type == 'email' || $opt_type == 'url') :
+				?>
+				
+					<tr>
+						<th>
+							<label for="<?php echo $opt_id ?>"><?php echo $opt_name ?>:</label>
+						</th>
+						<td>
+							<p class="option_desc"><?php echo $opt_desc ?></p>
+							<p><input size="60" name="<?php echo $opt_id ?>" id="<?php echo $opt_id ?>" type="<?php echo $opt_type ?>" value="<?php echo stripslashes($opt_val) ?>"></p>
+						
+						</td>
+					</tr>
+				
+        <?php 
+				
 				// Displays correct inputs for "select" type
-				} elseif ($opt_type == 'select') {
+				elseif ($opt_type == 'select') :
 				?>
                 
-                <tr>
-					<th style="border-bottom: 1px solid #f1f1f1; text-align: left; padding: 10px" scope="row">
-						<label for="<?php echo $opt_id; ?>"><?php echo $opt_name; ?>:</label>
-					</th>
-					<td style="padding: 20px 10px; border-bottom: 1px solid #f1f1f1">
-						<?php echo $opt_desc; ?><br >
-						<select name="<?php echo $opt_id; ?>" id="<?php echo $opt_id; ?>">	
-								<option value="">None</option>
-                        <?php foreach ($opt_options as $key => $val) {?>
-                        	<option value="<?php echo $key ?>" <?php 
-						if ( isset($propercfp_options[$opt_id]) && $propercfp_options[$opt_id] == $key) { 
-							echo 'selected';
-						} ?>><?php echo $val ?></option> 
-                        <?php } ?>
-                        </select>
-					</td>
-				</tr>
+					<tr>
+						<th>
+							<label for="<?php echo $opt_id ?>"><?php echo $opt_name ?>:</label>
+						</th>
+						<td>
+							<p class="option_desc"><?php echo $opt_desc; ?></p>
+							<p>
+								<select name="<?php echo $opt_id ?>" id="<?php echo $opt_id ?>">
+									<?php 
+									foreach ($opt_options as $val) : 
+									
+										$selected = '';	
+										if ( $propercfp_options[$opt_id] == $val || ( empty($propercfp_options[$opt_id]) && $opt_default == $val ) ) 
+											$selected = 'selected';	
+											?>
+										<option value="<?php echo $val ?>" <?php echo $selected ?>><?php echo $val ?></option> 
+									<?php endforeach; ?>
+								</select>
+							</p>
+						</td>
+					</tr>
                 
-                <?php 
-				} 
+       	<?php 
+				 
 				// Displays correct inputs for "radio" type
-				elseif ($opt_type == 'radio') {
+				elseif ($opt_type == 'radio') :
 				?>
                 
-                <tr>
-					<th style="border-bottom: 1px solid #f1f1f1; text-align: left; padding: 10px" scope="row">
-						<?php echo $opt_name; ?>:
-					</th>
-					<td style="padding: 20px 10px; border-bottom: 1px solid #f1f1f1">
-						<?php echo $opt_desc; ?><br >
-                        <?php foreach ($opt_options as $val) {?>
-                        
-                        <input type="radio" value="<?php echo $val ?>" <?php if ( $propercfp_options[$opt_id] == $val || ($propercfp_options[$opt_id] == '' && $opt_default == $val )) { echo 'checked';} ?> name="<?php echo $opt_id; ?>" id="<?php echo $opt_id . $val; ?>">
-                        <label for="<?php echo $opt_id . $val; ?>"><?php echo $val ?></label><br >
-                        <?php } ?>
+					<tr>
+						<th>
+							<span><?php echo $opt_name ?>:</span>
+						</th>
+						<td>
+							<p class="option_desc"><?php echo $opt_desc; ?></p>
+							
+							<?php 
+							foreach ($opt_options as $val) : 
+								
+								$checked = '';
+								if ( $propercfp_options[$opt_id] == $val || ( empty($propercfp_options[$opt_id]) && $opt_default == $val )) 
+									$checked = 'checked';
+									?>		
+												
+								<p><input type="radio" value="<?php echo $val ?>" name="<?php echo $opt_id ?>" id="<?php echo $opt_id . '_' . $val; ?>" <?php echo $checked ?>>
+								<label for="<?php echo $opt_id . $val; ?>"><?php echo $val ?></label><br></p>
+								
+							<?php endforeach; ?>
+						</td>
+					</tr>
+                
+        <?php 
+				
+				// Checkbox input, allows for multiple or single
+				elseif ($opt_type == 'checkbox') :
+				?>
+                
+					<tr>
+						<th>
+							<span><?php echo $opt_name ?>:</span>
+						</th>
+					<td>	
+						<p class="option_desc"><?php echo $opt_desc ?></p>
+						<?php
+						// If we have multiple checkboxes to show
+						if (!empty($opt_options)) : 
+							for ( $i = 0; $i < count($opt_options); $i++ ) :
+								
+								// Need to mark current options as checked
+								$checked = '';
+								if ( in_array($opt_options[$i], $propercfp_options[$opt_id]) ) 
+									$checked = 'checked';
+									?>
+								<p>
+								<input type="checkbox" value="<?php echo $opt_options[$i] ?>" name="<?php echo $opt_id ?>[]" id="<?php echo $opt_id . '_' . $i ?>" <?php echo $checked ?>>
+								<label for="<?php echo $opt_id . '_' . $i ?>"><?php echo $opt_options[$i] ?></label>
+								</p>
+							<?php
+							endfor;
+						
+						// Single "on-off" checkbox
+						else :
+							$checked = '';
+							if ( $opt_val == 'yes' ) 
+								$checked = 'checked';
+								?>
+						<p>
+							<input type="checkbox" value="yes" name="<?php echo $opt_id ?>" id="<?php echo $opt_id ?>" <?php echo $checked ?>>
+							<label for="<?php echo $opt_id ?>">Yes</label>
+						</p>
+						<?php endif; ?>
+					
 					</td>
-				</tr>
+					</tr>
                 
-                <?php } elseif ($opt_type == 'checkbox') {?>
-                
-                <tr>
-					<th style="border-bottom: 1px solid #f1f1f1; text-align: left; padding: 10px" scope="row">
-						<?php echo $opt_name; ?>:
-					</th>
-					<td style="padding: 20px 10px; border-bottom: 1px solid #f1f1f1">	
-						<?php echo $opt_desc ?><br >
-                        <input type="checkbox" value="yes" <?php if ( isset($propercfp_options[$opt_id]) && $propercfp_options[$opt_id] == 'yes' ) { echo 'checked';} ?> name="<?php echo $opt_id; ?>" id="<?php echo $opt_id; ?>">
-                        <label for="<?php echo $opt_id; ?>">Yes</label><br >
-
-					</td>
-				</tr>
-                
-				<?php } 
-				// Displays correct inputs for "textarea" type
-				elseif ($opt_type == 'textarea') { ?>
+				<?php 
+				
+				// Displays input for "textarea" type
+				elseif ($opt_type == 'textarea') : 
+				?>
 				<tr>
-					<th style="border-bottom: 1px solid #f1f1f1; text-align: left; padding: 10px" scope="row">
-						<?php echo $opt_name; ?>:
+					<th>
+						<?php echo $opt_name ?>:
 					</th>
-					<td style="padding: 20px 10px; border-bottom: 1px solid #f1f1f1">
-					<?php echo $opt_desc ?><br>
-						<textarea onfocus="this.select();" rows="6" cols="60" name="<?php echo $opt_id; ?>" id="<?php echo $opt_id; ?>" style="<?php echo $value['style']; ?>" type="<?php echo $opt_type; ?>" ><?php if ( isset($propercfp_options[$opt_id])) { echo stripslashes($propercfp_options[$opt_id]); }?></textarea>
+					<td>
+						<textarea rows="6" cols="60" name="<?php echo $opt_id ?>" id="<?php echo $opt_id ?>"><?php echo stripslashes($opt_val)?></textarea>
 					</td>
 				</tr>
 				
-				<?php } elseif ($opt_type == 'title') {?>
-				<tr>
-                      <td style="padding: 20px 10px;" colspan="2" class="header">
-                         <h3 style="font-size: 1.6em"><?php  echo $opt_name ?></h3>
-                       </td>
-				 </tr>
-				<?php  }?>
-            
-			<?php 
+				<?php 
+				endif;
 	
 			endforeach; 
 			?>
-			</div>
-			 </table>
-			 <p class="submit">
-			 <input name="save" type="submit" value="Save changes" class="button-primary">
-			 <input type="hidden" name="action" value="save" >
-			</p>
-		  </form>
+				<tr>
+					<td colspan="2">
+						<p>
+							<input name="save" type="submit" value="Save changes" class="button-primary">
+							<input type="hidden" name="action" value="save" >
+							
+							<?php if (isset($propercfp_options['last-panel'])) : ?>
+							<input type="hidden" id="proper-show-panel" name="panel" value="<?php echo $propercfp_options['last-panel'] ?>" >
+							<?php else : ?>
+							<input type="hidden" id="proper-show-panel" name="panel" value="header" >
+							<?php endif; ?>
+						</p>
+						
+					</td>
+				</tr>
+			</table>
+		</form>
 	
-		  
-		</div>
-		
-<?php 
-
-}//end function mytheme_admin() 
+	</div>
+	
+	<?php 
+} 
 
 
-function jch_settings_init() {
+function proper_contact_form_settings_init() {
 	
 	global $plugin_options, $propercfp_options;
 	
-	if (!get_option('propercfp_settings_array')) :
+	if (!get_option('propercfp_settings_array')) {
 		
-		foreach ($plugin_options as $opt) {
-				
-			$propercfp_options[$opt[1]] = $opt[3];
-			
-		}
+		foreach ($plugin_options as $opt)				
+			$propercfp_options[$opt[1]] = $opt[4];
 			
 		update_option( 'propercfp_settings_array', $propercfp_options);
 	
-	endif; 
-		
-
+	}
+	
 }
 
-add_action('admin_head', 'jch_settings_init');
+add_action('admin_head', 'proper_contact_form_settings_init');
+
+// Admin screens
+function proper_contact_form_css () {
+
+	wp_register_style( 'proper_contact_form_css', plugin_dir_url( __FILE__ ) . 'admin.css');
+	wp_enqueue_style( 'proper_contact_form_css' );
+	
+}
+add_action('admin_enqueue_scripts', 'proper_contact_form_css');

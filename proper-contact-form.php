@@ -1,10 +1,12 @@
 <?php 
 
 /*
-Plugin Name: Proper Contact Form
+Plugin Name: PROPER Contact Form
+Plugin URI: http://theproperweb.com/shipped/wp/proper-contact-form
 Description: A better contact form processor
-Version: 0.9
+Version: 0.9.1
 Author: Proper Development
+Author URI: http://theproperweb.com
 License: GPL2
 */
 
