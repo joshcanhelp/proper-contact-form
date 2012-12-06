@@ -39,7 +39,7 @@ function proper_contact_form($atts, $content = null) {
 	), 'contact-name');
 	
 	// Required email field
-	if(proper_get_key('propercfp_email_field')) :
+	if(proper_get_key('propercfp_email_field') != 'None') :
 		$required = proper_get_key('propercfp_email_field') === 'req' ? true : false;
 		$form->add_input(proper_get_key('propercfp_label_email'), array(
 			'required' => $required,
@@ -49,7 +49,7 @@ function proper_contact_form($atts, $content = null) {
 	endif;
 	
 	// Add phone field if selected on the settings page
-	if(proper_get_key('propercfp_phone_field')) :
+	if(proper_get_key('propercfp_phone_field') != 'None') :
 		$required = proper_get_key('propercfp_phone_field') === 'req' ? true : false;
 		$form->add_input(proper_get_key('propercfp_label_phone'), array(
 			'required' => $required
@@ -218,7 +218,7 @@ Sent from page: ' . get_permalink(get_the_id());
 		endif;
 		
 		// Should the user get redirected?
-		if(proper_get_key('propercfp_result_url')) : 
+		if(proper_get_key('propercfp_result_url') != 'None') : 
 			$redirect_id = proper_get_key('propercfp_result_url');
 			$redirect = get_permalink($redirect_id);
 			wp_redirect($redirect);

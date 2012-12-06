@@ -425,14 +425,16 @@ function proper_contact_admin() {
 
 function proper_contact_form_settings_init() {
 	
-	global $plugin_options, $propercfp_options;
+	global $plugin_options;
 	
 	if (!get_option('propercfp_settings_array')) {
 		
+		$new_opt = array();
+		
 		foreach ($plugin_options as $opt)				
-			$propercfp_options[$opt[1]] = $opt[4];
+			$new_opt[$opt[1]] = $opt[4];
 			
-		update_option( 'propercfp_settings_array', $propercfp_options);
+		update_option( 'propercfp_settings_array', $new_opt);
 	
 	}
 	

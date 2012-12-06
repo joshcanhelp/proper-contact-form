@@ -3,7 +3,9 @@
 if (! function_exists('proper_get_content_array')) {
 function proper_get_content_array($type = 'page') {
 	
-	$content = array();
+	$content = array(
+		'' => 'None'
+	);
 
 	$items = get_posts(array(
 		'post_type' => $type,
