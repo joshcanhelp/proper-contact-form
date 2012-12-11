@@ -47,7 +47,7 @@ $plugin_options = array(
 	array(
 		'"Reason for contacting" options',
 		'propercfp_reason',
-		'Enter the options for the "Reason for contacting" dropdown, each on their own line. Leave this blank to omit this option',
+		'You can have people choose the reason for their contact from a drop-down list. If you would like this option to appear, enter the different reasons into the text box below, separated by a carriage return.',
 		'textarea',
 		'',
 	),
@@ -295,13 +295,13 @@ function proper_contact_admin() {
 							<p>
 								<select name="<?php echo $opt_id ?>" id="<?php echo $opt_id ?>">
 									<?php 
-									foreach ($opt_options as $val) : 
+									foreach ($opt_options as $key => $val) : 
 									
 										$selected = '';	
 										if ( $propercfp_options[$opt_id] == $val || ( empty($propercfp_options[$opt_id]) && $opt_default == $val ) ) 
 											$selected = 'selected';	
 											?>
-										<option value="<?php echo $val ?>" <?php echo $selected ?>><?php echo $val ?></option> 
+										<option value="<?php echo $key ?>" <?php echo $selected ?>><?php echo $val ?></option> 
 									<?php endforeach; ?>
 								</select>
 							</p>
@@ -390,6 +390,7 @@ function proper_contact_admin() {
 						<?php echo $opt_name ?>:
 					</th>
 					<td>
+						<p class="option_desc"><?php echo $opt_desc ?></p>
 						<textarea rows="6" cols="60" name="<?php echo $opt_id ?>" id="<?php echo $opt_id ?>"><?php echo stripslashes($opt_val)?></textarea>
 					</td>
 				</tr>
@@ -445,7 +446,7 @@ add_action('admin_head', 'proper_contact_form_settings_init');
 // Admin screens
 function proper_contact_form_css () {
 
-	wp_register_style( 'proper_contact_form_css', plugin_dir_url( __FILE__ ) . 'admin.css');
+	wp_register_style( 'proper_contact_form_css', plugin_dir_url( __FILE__ ) . 'css/admin.css');
 	wp_enqueue_style( 'proper_contact_form_css' );
 	
 }
