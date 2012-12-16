@@ -21,6 +21,18 @@ $plugin_options = array(
 		'',
 	),
 	array(
+		'Name',
+		'propercfp_name_field',
+		'Should a name field be displayed?',
+		'select',
+		'yes', 
+		array(
+			'' => 'None',
+			'yes' => 'Yes but not required',
+			'req' => 'Required'
+		),
+	),
+	array(
 		'Email address',
 		'propercfp_email_field',
 		'Should an email address field be displayed?',
@@ -47,7 +59,7 @@ $plugin_options = array(
 	array(
 		'"Reason for contacting" options',
 		'propercfp_reason',
-		'You can have people choose the reason for their contact from a drop-down list. If you would like this option to appear, enter the different reasons into the text box below, separated by a carriage return.',
+		'You can have people choose the reason for their contact from a drop-down list. If you would like this option to appear, enter the different reasons into the text box below, each one on its own line.',
 		'textarea',
 		'',
 	),
@@ -295,10 +307,11 @@ function proper_contact_admin() {
 							<p>
 								<select name="<?php echo $opt_id ?>" id="<?php echo $opt_id ?>">
 									<?php 
+									
 									foreach ($opt_options as $key => $val) : 
 									
 										$selected = '';	
-										if ( $propercfp_options[$opt_id] == $val || ( empty($propercfp_options[$opt_id]) && $opt_default == $val ) ) 
+										if ( $propercfp_options[$opt_id] == $key ) 
 											$selected = 'selected';	
 											?>
 										<option value="<?php echo $key ?>" <?php echo $selected ?>><?php echo $val ?></option> 
@@ -325,7 +338,7 @@ function proper_contact_admin() {
 							foreach ($opt_options as $val) : 
 								
 								$checked = '';
-								if ( $propercfp_options[$opt_id] == $val || ( empty($propercfp_options[$opt_id]) && $opt_default == $val )) 
+								if ( $propercfp_options[$opt_id] == $val ) 
 									$checked = 'checked';
 									?>		
 												

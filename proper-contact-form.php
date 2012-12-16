@@ -31,15 +31,18 @@ function proper_contact_form($atts, $content = null) {
 	$form->set_att('id', 'proper_contact_form_' . get_the_id());
 	$form->set_att('class', array('proper_contact_form'));
 	$form->set_att('add_nonce', get_bloginfo('admin_email'));
+
+	// Add name field if selected on the settings page
+	if( proper_get_key('propercfp_name_field') ) :
+		$required = proper_get_key('propercfp_name_field') === 'req' ? true : false;
+		$form->add_input(proper_get_key('propercfp_label_name'), array(
+			'required' => $required,
+			'wrap_class' => isset($_SESSION['cfp_contact_errors']['contact-name']) ? array('form_field_wrap', 'error') : array('form_field_wrap')
+		), 'contact-name');
+	endif;
 	
-	// Required name field
-	$form->add_input(proper_get_key('propercfp_label_name'), array(
-	'required' => true,
-	'wrap_class' => isset($_SESSION['cfp_contact_errors']['contact-name']) ? array('form_field_wrap', 'error') : array('form_field_wrap')
-	), 'contact-name');
-	
-	// Required email field
-	if(proper_get_key('propercfp_email_field') != 'None') :
+	// Add email field if selected on the settings page
+	if( proper_get_key('propercfp_email_field') ) :
 		$required = proper_get_key('propercfp_email_field') === 'req' ? true : false;
 		$form->add_input(proper_get_key('propercfp_label_email'), array(
 			'required' => $required,
@@ -49,7 +52,7 @@ function proper_contact_form($atts, $content = null) {
 	endif;
 	
 	// Add phone field if selected on the settings page
-	if(proper_get_key('propercfp_phone_field') != 'None') :
+	if( proper_get_key('propercfp_phone_field') ) :
 		$required = proper_get_key('propercfp_phone_field') === 'req' ? true : false;
 		$form->add_input(proper_get_key('propercfp_label_phone'), array(
 			'required' => $required
@@ -131,7 +134,7 @@ function cfp_process_contact() {
 	
 	// Sanitize and validate name
 	$contact_name = sanitize_text_field(trim($_POST['contact-name']));
-	if (empty($contact_name)) 
+	if (proper_get_key('propercfp_email_field') === 'req' && empty($contact_name)) 
 		$_SESSION['cfp_contact_errors']['contact-name'] = 'Enter your name';
 	else 
 		$body .= "
@@ -218,7 +221,7 @@ Sent from page: ' . get_permalink(get_the_id());
 		endif;
 		
 		// Should the user get redirected?
-		if(proper_get_key('propercfp_result_url') != 'None') : 
+		if( proper_get_key('propercfp_result_url')) : 
 			$redirect_id = proper_get_key('propercfp_result_url');
 			$redirect = get_permalink($redirect_id);
 			wp_redirect($redirect);
