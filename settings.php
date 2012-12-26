@@ -95,7 +95,7 @@ $plugin_options = array(
 	array(
 		'Store submissions in the database',
 		'propercfp_store',
-		'Should the submissions be stored in the admin area?',
+		'Should the submissions be stored in the admin area? If chosen, contact form submissions will be saved in Contacts on the left (appears after this option is activated).',
 		'checkbox',
 		'',
 	),
