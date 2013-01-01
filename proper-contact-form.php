@@ -35,7 +35,7 @@ function proper_contact_form($atts, $content = null) {
 	// Add name field if selected on the settings page
 	if( proper_get_key('propercfp_name_field') ) :
 		$required = proper_get_key('propercfp_name_field') === 'req' ? true : false;
-		$form->add_input(proper_get_key('propercfp_label_name'), array(
+		$form->add_input(stripslashes(proper_get_key('propercfp_label_name')), array(
 			'required' => $required,
 			'wrap_class' => isset($_SESSION['cfp_contact_errors']['contact-name']) ? array('form_field_wrap', 'error') : array('form_field_wrap')
 		), 'contact-name');
@@ -44,7 +44,7 @@ function proper_contact_form($atts, $content = null) {
 	// Add email field if selected on the settings page
 	if( proper_get_key('propercfp_email_field') ) :
 		$required = proper_get_key('propercfp_email_field') === 'req' ? true : false;
-		$form->add_input(proper_get_key('propercfp_label_email'), array(
+		$form->add_input(stripslashes(proper_get_key('propercfp_label_email')), array(
 			'required' => $required,
 			'type' => 'email',
 			'wrap_class' => isset($_SESSION['cfp_contact_errors']['contact-email']) ? array('form_field_wrap', 'error') : array('form_field_wrap')
@@ -54,7 +54,7 @@ function proper_contact_form($atts, $content = null) {
 	// Add phone field if selected on the settings page
 	if( proper_get_key('propercfp_phone_field') ) :
 		$required = proper_get_key('propercfp_phone_field') === 'req' ? true : false;
-		$form->add_input(proper_get_key('propercfp_label_phone'), array(
+		$form->add_input(stripslashes(proper_get_key('propercfp_label_phone')), array(
 			'required' => $required
 		), 'contact-phone');
 	endif;
@@ -65,14 +65,14 @@ function proper_contact_form($atts, $content = null) {
 		$options = proper_get_textarea_opts($reasons);
 		if (!empty($options))
 			array_unshift($options, 'Select one...');
-			$form->add_input(proper_get_key('propercfp_label_reason'), array(
+			$form->add_input(stripslashes(proper_get_key('propercfp_label_reason')), array(
 				'type' => 'select',
 				'options' => $options
 			), 'contact-reasons');
 	endif;
 	
 	// Comment field
-	$form->add_input(proper_get_key('propercfp_label_comment'), array(
+	$form->add_input(stripslashes(proper_get_key('propercfp_label_comment')), array(
 		'required' => true,
 		'type' => 'textarea',
 		'wrap_class' => isset($_SESSION['cfp_contact_errors']['question-or-comment']) ? array('form_field_wrap', 'error') : array('form_field_wrap')
@@ -133,7 +133,7 @@ function cfp_process_contact() {
 *** Contact form submission on " . get_bloginfo('name') . " (" . site_url() . ")\n\n";
 	
 	// Sanitize and validate name
-	$contact_name = sanitize_text_field(trim($_POST['contact-name']));
+	$contact_name = isset($_POST['contact-name']) ? sanitize_text_field(trim($_POST['contact-name'])) : '';
 	if (proper_get_key('propercfp_email_field') === 'req' && empty($contact_name)) 
 		$_SESSION['cfp_contact_errors']['contact-name'] = 'Enter your name';
 	else 
@@ -141,7 +141,7 @@ function cfp_process_contact() {
 Name: $contact_name\n";
 	
 	// Sanitize and validate email
-	$contact_email = sanitize_email($_POST['contact-email']);
+	$contact_email = isset($_POST['contact-email']) ? sanitize_email($_POST['contact-email']) : '';
 	if (proper_get_key('propercfp_email_field') === 'req' && ! filter_var($contact_email, FILTER_VALIDATE_EMAIL) ) 
 		$_SESSION['cfp_contact_errors']['contact-email'] = 'Enter a valid email';
 	elseif (!empty($contact_email)) 
@@ -176,8 +176,7 @@ Comment/question: " . stripslashes($contact_comment) . "\n";
 	if (!empty($contact_ip)) 
 		$body .= "
 IP address: $contact_ip \r
-IP search: http://whois.domaintools.com/$contact_ip \r
-IP search: http://whatismyipaddress.com/ip/$contact_ip)\n";
+IP search: http://whatismyipaddress.com/ip/$contact_ip\n";
 	
 	// Sanitize and prepare referrer
 	$contact_referrer = sanitize_text_field($_POST['contact-referrer']);

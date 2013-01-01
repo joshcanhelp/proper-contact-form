@@ -237,7 +237,7 @@ function proper_contact_admin() {
 				// Input type, set to callback to use a function to build the input
 				$opt_type = $value[3];
 				
-				// Default vale
+				// Default value
 				$opt_default = $value[4];
 			
 				// Value currently saved
@@ -311,7 +311,7 @@ function proper_contact_admin() {
 									foreach ($opt_options as $key => $val) : 
 									
 										$selected = '';	
-										if ( $propercfp_options[$opt_id] == $key ) 
+										if ( $opt_val == $key )
 											$selected = 'selected';	
 											?>
 										<option value="<?php echo $key ?>" <?php echo $selected ?>><?php echo $val ?></option> 
