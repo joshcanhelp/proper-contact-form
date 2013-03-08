@@ -11,10 +11,10 @@ class ThatFormBuilder {
 	private $form = array(); 
 	
 	// Make sure a submit button is output
-	private $has_submit = false;
+	private $has_submit = FALSE;
 	
 	// Constructor to set basic form attributes
-	function __construct($action = '', $args = false) {
+	function __construct($action = '', $args = FALSE) {
 		
 		$defaults = array(
 			'action' => $action,
@@ -23,9 +23,10 @@ class ThatFormBuilder {
 			'class' => array(),
 			'id' => '',
 			'markup' => 'html',
-			'novalidate' => false,
-			'add_nonce' => false,
-			'add_honeypot' => true,
+			'novalidate' => FALSE,
+			'add_nonce' => FALSE,
+			'add_honeypot' => TRUE,
+			'submit_text' => 'Submit'
 		);
 		
 		if ($args) $settings = array_merge($defaults, $args);
@@ -45,39 +46,39 @@ class ThatFormBuilder {
 		switch ($key) :
 			
 			case 'method':
-				if (! in_array($val, array('post', 'get'))) return false;
+				if (! in_array($val, array('post', 'get'))) return FALSE;
 				break;
 			
 			case 'enctype':
-				if (! in_array($val, array('application/x-www-form-urlencoded', 'multipart/form-data'))) return false;
+				if (! in_array($val, array('application/x-www-form-urlencoded', 'multipart/form-data'))) return FALSE;
 				break;
 			
 			case 'markup':
-				if (! in_array($val, array('html', 'xhtml'))) return false;
+				if (! in_array($val, array('html', 'xhtml'))) return FALSE;
 				break;
 			
 			case 'class':
 			case 'id':
-				if (! $this->_check_valid_attr($val)) return false;
+				if (! $this->_check_valid_attr($val)) return FALSE;
 				break;
 			
 			case 'novalidate':
 			case 'add_honeypot':
-				if (! is_bool($val)) return false;
+				if (! is_bool($val)) return FALSE;
 				break;
 			
 			case 'add_nonce':
-				if (! is_string($val) && !is_bool($val)) return false;
+				if (! is_string($val) && !is_bool($val)) return FALSE;
 				break;
 			
 			default: 
-				return false;
+				return FALSE;
 			
 		endswitch;
 		
 		$this->form[$key] = $val;
 		
-		return true;
+		return TRUE;
 		
 	}
 	
@@ -99,10 +100,10 @@ class ThatFormBuilder {
 			'min' => '',
 			'max' => '',
 			'step' => '',
-			'autofocus' => false,
-			'checked' => false,
-			'required' => false,
-			'add_label' => true,
+			'autofocus' => FALSE,
+			'checked' => FALSE,
+			'required' => FALSE,
+			'add_label' => TRUE,
 			'options' => array(),
 			'wrap_tag' => 'div',
 			'wrap_class' => array('form_field_wrap'),
@@ -122,7 +123,7 @@ class ThatFormBuilder {
 	// Add multiple inputs to the queue
 	function add_inputs($arr) {
 		
-		if (!is_array($arr)) return false;
+		if (!is_array($arr)) return FALSE;
 		
 		foreach ($arr as $field) :
 			$this->add_input($field[0], isset($field[1]) ? $field[1] : '', isset($field[2]) ? $field[2] : '');
@@ -131,7 +132,7 @@ class ThatFormBuilder {
 	}
 	
 	// Parse the inputs and build the form HTML
-	function build_form($echo = true) {
+	function build_form($echo = TRUE) {
 	
 		$output = '
 		<form method="' . $this->form['method'] . '"';
@@ -162,7 +163,7 @@ class ThatFormBuilder {
 		if ($this->form['add_nonce'] && function_exists('wp_create_nonce')) 
 			$this->add_input('WordPress nonce', array(
 				'value' => wp_create_nonce($this->form['add_nonce']),
-				'add_label' => false,
+				'add_label' => FALSE,
 				'type' => 'hidden'
 			));
 		
@@ -222,8 +223,8 @@ class ThatFormBuilder {
 					$min_max_range .= !empty($val['step']) ? ' step="' . $val['step'] . '"' : '';
 				
 				case 'submit':
-					$this->has_submit = true;
-					break;
+					$this->has_submit = TRUE;
+					$val['value'] = $val['label'];
 				
 				default :
 					$element = 'input';
@@ -291,7 +292,7 @@ class ThatFormBuilder {
 	// :FIXIT: Add validation for classes and ids
 	private function _check_valid_attr($string) {
 		
-		$result = true;
+		$result = TRUE;
 		
 		// Check $name for correct characters
 		// "^[a-zA-Z0-9_-]*$"
