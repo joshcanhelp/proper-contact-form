@@ -161,8 +161,63 @@ $plugin_options = array(
 		'',
 		'text',
 		'Thank you for your contact!'
+	),
+	'head4' => array(
+		'HTML5 validation',
+		'',
+		'',
+		'title',
+		'',
+	),
+		'propercfp_html5_no_validate' => array(
+		'Use HTML5 validation',
+		'propercfp_html5_no_validate',
+		'',
+		'checkbox',
+		'yes'
+	),
+	'head5' => array (
+		'Error Messages (if not using HTML5 validation)',
+		'',
+		'',
+		'title',
+		'',
+	),
+	'propercfp_label_err_honeypot' => array(
+		'Error message if honeypot is empty',
+		'propercfp_label_err_honeypot',
+		'',
+		'text',
+		'No spam please!'
+	),
+	'propercfp_label_err_name' => array(
+		'Error message if name required and missing',
+		'propercfp_label_err_name',
+		'',
+		'text',
+		'Enter your name'
+	),
+	'propercfp_label_err_email' => array(
+		'Error message if E-mail required and missing',
+		'propercfp_label_err_email',
+		'',
+		'text',
+		'Enter a valid email'
+	),
+	'propercfp_label_err_phone' => array(
+		'Error message if phone required and missing',
+		'propercfp_label_err_phone',
+		'',
+		'text',
+		'Please enter a phone number'
+	),
+	'propercfp_label_err_no_content' => array(
+		'Error message if post content is missing',
+		'propercfp_label_err_no_content',
+		'',
+		'text',
+		'Enter your question or comment'
 	)
-	
 );
 
 function cfp_add_admin() {

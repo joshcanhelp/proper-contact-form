@@ -31,6 +31,10 @@ function proper_contact_form($atts, $content = NULL) {
 	$form->set_att('id', 'proper_contact_form_' . get_the_id());
 	$form->set_att('class', array('proper_contact_form'));
 	$form->set_att('add_nonce', get_bloginfo('admin_email'));
+	if (proper_contact_get_key('propercfp_html5_no_validate') === '') $form->set_att('novalidate', TRUE);
+
+
+
 
 	// Add name field if selected on the settings page
 	if( proper_contact_get_key('propercfp_name_field') ) :
@@ -129,10 +133,10 @@ function cfp_process_contact() {
 	
 	// If nonce is not passed or honeypot is not empty, escape
 	if (! wp_verify_nonce($_POST['wordpress-nonce'], get_bloginfo('admin_email')))
-		$_SESSION['cfp_contact_errors']['nonce'] = 'Invalid form submission!';
+		$_SESSION['cfp_contact_errors']['nonce'] = proper_contact_get_key('propercfp_label_err_nonce');
 		
 	if (! empty($_POST['honeypot'])) 
-		$_SESSION['cfp_contact_errors']['honeypot'] = 'No spam please!';
+		$_SESSION['cfp_contact_errors']['honeypot'] = proper_contact_get_key('propercfp_label_err_honeypot');
 	
 	$body = "
 *** Contact form submission on " . get_bloginfo('name') . " (" . site_url() . ")\n\n";
@@ -140,7 +144,7 @@ function cfp_process_contact() {
 	// Sanitize and validate name
 	$contact_name = isset($_POST['contact-name']) ? sanitize_text_field(trim($_POST['contact-name'])) : '';
 	if (proper_contact_get_key('propercfp_name_field') === 'req' && empty($contact_name))
-		$_SESSION['cfp_contact_errors']['contact-name'] = 'Enter your name';
+		$_SESSION['cfp_contact_errors']['contact-name'] = proper_contact_get_key('propercfp_label_err_name');
 	else 
 		$body .= "
 Name: $contact_name\n";
@@ -148,7 +152,7 @@ Name: $contact_name\n";
 	// Sanitize and validate email
 	$contact_email = isset($_POST['contact-email']) ? sanitize_email($_POST['contact-email']) : '';
 	if (proper_contact_get_key('propercfp_email_field') === 'req' && ! filter_var($contact_email, FILTER_VALIDATE_EMAIL) ) 
-		$_SESSION['cfp_contact_errors']['contact-email'] = 'Enter a valid email';
+		$_SESSION['cfp_contact_errors']['contact-email'] = proper_contact_get_key('propercfp_label_err_email');
 	elseif (!empty($contact_email)) 
 		$body .= "
 Email: $contact_email\r
@@ -157,7 +161,7 @@ Email search: https://www.google.com/#q=$contact_email\n";
 	// Sanitize phone number
 	$contact_phone = isset($_POST['contact-phone']) ? sanitize_text_field($_POST['contact-phone']) : '';
 	if (proper_contact_get_key('propercfp_phone_field') === 'req' && empty($contact_phone) ) 
-		$_SESSION['cfp_contact_errors']['contact-phone'] = 'Please enter a phone number';
+		$_SESSION['cfp_contact_errors']['contact-phone'] = proper_contact_get_key('propercfp_label_err_phone');
 	elseif (!empty($contact_phone)) 
 		$body .= "
 Phone: $contact_phone\n";
@@ -171,7 +175,7 @@ Reason for contacting: $contact_reason\n";
 	// Sanitize and validate comments
 	$contact_comment = sanitize_text_field(trim($_POST['question-or-comment']));
 	if (empty($contact_comment)) 
-		$_SESSION['cfp_contact_errors']['question-or-comment'] = 'Enter your question or comment';
+		$_SESSION['cfp_contact_errors']['question-or-comment'] = proper_contact_get_key('propercfp_label_err_no_content');
 	else 
 		$body .= "
 Comment/question: " . stripslashes($contact_comment) . "\n";
