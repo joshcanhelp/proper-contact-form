@@ -22,6 +22,7 @@ At the moment, this plugins creates a contact form with the shortcode `[proper_c
 
 Features in the works:
 
+- Additional style options
 - Complete internationalization
 - Ability to add custom fields to the form
 
