@@ -1,5 +1,5 @@
 === Proper Contact Form ===
-Contributors: properwp
+Contributors: properwp, joshcanhelp
 Donate link: 
 Tags: contact, contact form
 Requires at least: 3.0
@@ -17,10 +17,13 @@ At the moment, this plugins creates a contact form with the shortcode `[proper_c
 - Choose the fields that appear
 - Create an auto-respond email
 - Redirect contact submissions to a new page (helpful for goal tracking)
-- Store contacts in the admin
-- Over-ride label names
+- Store contacts in the database
+- Over-ride label names and error messages
 
-The current, basic functionality will not change but, in a future version, WP users will be able to add custom forms with validation quickly and easily. 
+Features in the works:
+
+- Complete internationalization
+- Ability to add custom fields to the form
 
 Get the absolute latest at the [Github repo](https://github.com/joshcanhelp/proper-contact-form).
 
@@ -44,6 +47,15 @@ Activating the Proper Contact Form plugin is just like any other plugin. If you'
 7. To add this form to any page or post, just copy/paste or type "[proper_contact_form]" into the page or post content and save. The form should appear on that page
 
 == Changelog ==
+
+= 0.9.5 =
+* Added text fields for error messages and submit button
+* Added a setting to use HTML5 validation
+* Changed to use custom label fields for email notification
+* Changed to use the "Text to show when form is submitted..." text for the confirmation email subject
+* Changed the email notification format slightly
+* Setting better default text and information throughout
+* Fixed the missing error formatting for the phone number field
 
 = 0.9.3 =
 * Fixed name requirement issue
