@@ -3,8 +3,8 @@ Contributors: properwp, joshcanhelp
 Donate link: 
 Tags: contact, contact form
 Requires at least: 3.0
-Tested up to: 3.5
-Stable tag: 0.9.3
+Tested up to: 3.5.1
+Stable tag: 0.9.5.1
 
 Creates a flexible, secure contact form on your WP site
 
@@ -48,6 +48,10 @@ Activating the Proper Contact Form plugin is just like any other plugin. If you'
 7. To add this form to any page or post, just copy/paste or type "[proper_contact_form]" into the page or post content and save. The form should appear on that page
 
 == Changelog ==
+
+= 0.9.5.1 =
+* Improved field handling
+* Better security for the settings page
 
 = 0.9.5 =
 * Added text fields for error messages and submit button

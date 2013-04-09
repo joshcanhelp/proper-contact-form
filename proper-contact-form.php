@@ -4,7 +4,7 @@
 Plugin Name: PROPER Contact Form
 Plugin URI: http://theproperweb.com/shipped/wp/proper-contact-form
 Description: A better contact form processor
-Version: 0.9.3
+Version: 0.9.5.1
 Author: PROPER Development
 Author URI: http://theproperweb.com
 License: GPL2
@@ -15,11 +15,14 @@ require_once(WP_PLUGIN_DIR . '/' . basename(dirname(__FILE__)) . '/inc/helpers.p
 
 function proper_contact_form($atts, $content = NULL) {
 
-	if (isset($_SESSION['propercfp_sent']) && $_SESSION['propercfp_sent'] === 'yes') :
+	if (
+		isset($_SESSION['propercfp_sent']) &&
+		$_SESSION['propercfp_sent'] === 'yes'
+	) :
 		unset($_SESSION['propercfp_sent']);
 		return '
 		<div class="proper_contact_form_wrap">
-			<h2>'.proper_contact_get_key('propercfp_label_submit').'</h2>
+			<h2>' . proper_contact_get_key('propercfp_label_submit') . '</h2>
 		</div>';
 	endif;
 
@@ -86,19 +89,15 @@ function proper_contact_form($atts, $content = NULL) {
 	$form->add_input(stripslashes(proper_contact_get_key('propercfp_label_comment')), array(
 		'required' => TRUE,
 		'type' => 'textarea',
-		'wrap_class' => isset($_SESSION['cfp_contact_errors']['question-or-comment']) ? array('form_field_wrap', 'error') : array('form_field_wrap')
+		'wrap_class' => isset($_SESSION['cfp_contact_errors']['question-or-comment']) ?
+			array('form_field_wrap', 'error') :
+			array('form_field_wrap')
 	), 'question-or-comment');
 
 	// Submit button
 	$form->add_input( proper_contact_get_key( 'propercfp_label_submit_btn' ), array(
 		'type' => 'submit'
 	), 'submit');
-
-	// IP Address
-	$form->add_input('Contact IP', array(
-		'type' => 'hidden',
-		'value' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : ''
-	));
 
 	// Referring site
 	$form->add_input('Contact Referrer', array(
@@ -176,13 +175,13 @@ Google: https://www.google.com/#q=$contact_email \r";
 	}
 
 	// Sanitize contact reason
-	$contact_reason = isset($_POST['contact-reasons']) ? strip_tags($_POST['contact-reasons']) : '';
+	$contact_reason = isset($_POST['contact-reasons']) ? sanitize_text_field($_POST['contact-reasons']) : '';
 	if (!empty($contact_reason)) {
 		$body .= stripslashes( proper_contact_get_key( 'propercfp_label_reason' ) ) . ": $contact_reason \r";
 	}
 
 	// Sanitize and validate comments
-	$contact_comment = sanitize_text_field(trim($_POST['question-or-comment']));
+	$contact_comment = filter_var((trim($_POST['question-or-comment'])), FILTER_SANITIZE_STRING);
 	if (empty($contact_comment)) {
 		$_SESSION['cfp_contact_errors']['question-or-comment'] = proper_contact_get_key('propercfp_label_err_no_content');
 	} else {
@@ -190,7 +189,7 @@ Google: https://www.google.com/#q=$contact_email \r";
 	}
 
 	// Sanitize and validate IP
-	$contact_ip = filter_var($_POST['contact-ip'], FILTER_VALIDATE_IP);
+	$contact_ip = filter_var( $_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
 	if (!empty($contact_ip)) {
 		$body .= "IP address: $contact_ip \r
 IP search: http://whatismyipaddress.com/ip/$contact_ip \n\n";

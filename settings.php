@@ -102,7 +102,7 @@ $plugin_options = array(
 	'propercfp_confirm_email' => array(
 		'Send email confirmation to form submitter',
 		'propercfp_confirm_email',
-		'Adding text here will send an email to the form submitter. The email uses the "Text to show when form is submitted..." field below as the subject line.',
+		'Adding text here will send an email to the form submitter. The email uses the "Text to show when form is submitted..." field below as the subject line. Plain text only here, no HTML.',
 		'textarea',
 		'',
 	),
@@ -215,29 +215,33 @@ $plugin_options = array(
 
 function cfp_add_admin() {
 	
-	global $plugin_options, $propercfp_options ;
-	
-	if ( array_key_exists('page', $_GET) && $_GET['page'] === 'pcfp-admin' ) {
-		
-		if (array_key_exists('action', $_REQUEST)) {
-		
-			if ('save' == $_REQUEST['action'] ) {
-		
-				foreach ($plugin_options as $opt) {
-		
-					if (isset($_REQUEST[$opt[1]])) $propercfp_options[$opt[1]] = $_REQUEST[$opt[1]];
-					else $propercfp_options[$opt[1]] = '';
-		
-				}
-				
-				update_option('propercfp_settings_array', $propercfp_options);
-		
-				header("Location: admin.php?page=pcfp-admin&saved=true");
-				
-				die;
-		
-			} 
-		}
+	global $plugin_options, $propercfp_options, $current_user;
+	get_currentuserinfo();
+
+	if (
+		// On the right page
+		array_key_exists('page', $_GET) &&
+		$_GET['page'] === 'pcfp-admin' &&
+		// We're saving options
+		array_key_exists( 'action', $_REQUEST ) &&
+		$_REQUEST['action'] == 'save' &&
+		// This action is authorized
+		current_user_can( 'manage_options' ) &&
+		wp_verify_nonce( $_POST['proper_nonce'], $current_user->user_email )
+	) {
+
+		foreach ($plugin_options as $opt) :
+			if (isset($_REQUEST[$opt[1]])) {
+				$opt_data = filter_var($_REQUEST[$opt[1]], FILTER_SANITIZE_STRING);
+				$propercfp_options[$opt[1]] = $opt_data;
+			} else {
+				$propercfp_options[$opt[1]] = '';
+			}
+		endforeach;
+
+		update_option('propercfp_settings_array', $propercfp_options);
+		header("Location: admin.php?page=pcfp-admin&saved=true");
+		die;
 	}
 
 	add_submenu_page('options-general.php', "PROPER Contact settings", "PROPER Contact", 'edit_themes', 'pcfp-admin', 'proper_contact_admin');
@@ -250,7 +254,8 @@ add_action('admin_menu' , 'cfp_add_admin');
 
 function proper_contact_admin() {
 
-    global $plugin_options, $propercfp_options;
+    global $plugin_options, $propercfp_options, $current_user;
+	get_currentuserinfo();
 		?>
 	
 		<div class="wrap" id="proper-contact-options">
@@ -474,6 +479,9 @@ function proper_contact_admin() {
 						<p>
 							<input name="save" type="submit" value="Save changes" class="button-primary">
 							<input type="hidden" name="action" value="save" >
+							<input type="hidden" name="proper_nonce" value="<?php
+								echo wp_create_nonce( $current_user->user_email )
+							?>">
 						</p>
 						
 					</td>
