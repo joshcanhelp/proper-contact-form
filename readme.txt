@@ -1,6 +1,6 @@
 === PROPER Contact Form ===
 Contributors: properwp, joshcanhelp
-Donate link: http://www.theproperweb.com/code/wp/proper-contact-form/
+Donate link: http://theproperweb.com/product/proper-contact-form/
 Tags: contact, contact form, contact form widget
 Requires at least: 3.0
 Tested up to: 3.9.1
