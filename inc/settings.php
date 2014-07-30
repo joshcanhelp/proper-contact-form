@@ -292,12 +292,12 @@ function proper_contact_admin() {
 						<?php _e( 'How to use the', 'proper-contact' ) ?>
 						<?php _e( 'PROPER Contact Form', 'proper-contact' ) ?>:</h4>
 
-					<p><?php
-					_e(
-						'Simply configure the form below, save your changes, then add
-						<code>[proper_contact_form]</code> to any contact page.<br>
-						If you\'re adding this to a theme file, add	<code>&lt;?php echo do_shortcode( \'[proper_contact_form]\' ) ?&gt;</code >.', 'proper-contact' )
-					?></p>
+					<p>Simply configure the form below, save your changes, then add
+						<code>[proper_contact_form]</code> to any page or post. You can also add a
+						<a href="<?php echo admin_url( 'widgets.php' ); ?>">widget</a>.<br>
+						If you're adding this to a theme file, add
+						<code>&lt;?php echo do_shortcode( '[proper_contact_form]' ) ?&gt;</code>
+					</p>
 				</div>
 			</div>
 
