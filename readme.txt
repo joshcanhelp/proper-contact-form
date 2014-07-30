@@ -49,7 +49,10 @@ Activating the Proper Contact Form plugin is just like any other plugin. If you'
 == Changelog ==
 
 = 0.9.8.3 =
-* Upgraded PhpFormBuilder class to latest version
+* Upgraded PhpFormBuilder class to latest version; added check to make sure the class doesn't exist
+* Added an option to send notification emails from a different address
+* Removed id array element, using aray key instead
+
 
 = 0.9.8.2 =
 * Fixed no-settings error on install
