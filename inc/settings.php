@@ -11,18 +11,16 @@
 	5 = options
 	*/
 
-function proper_content_plugin_options() {
+function proper_contact_plugin_options() {
 	return array(
 		'head1' => array(
 			'Fields to show',
-			'',
 			'',
 			'title',
 			'',
 		),
 		'propercfp_name_field' => array(
 			'Name',
-			'propercfp_name_field',
 			'Should a name field be displayed?',
 			'select',
 			'yes',
@@ -34,7 +32,6 @@ function proper_content_plugin_options() {
 		),
 		'propercfp_email_field' => array(
 			'Email address',
-			'propercfp_email_field',
 			'Should an email address field be displayed?',
 			'select',
 			'yes',
@@ -46,7 +43,6 @@ function proper_content_plugin_options() {
 		),
 		'propercfp_phone_field' => array(
 			'Phone number',
-			'propercfp_phone_field',
 			'Should a phone number field be displayed?',
 			'select',
 			'yes',
@@ -58,14 +54,12 @@ function proper_content_plugin_options() {
 		),
 		'propercfp_reason' => array(
 			'"Reason for contacting" options',
-			'propercfp_reason',
 			'You can have people choose the reason for their contact from a drop-down list. If you would like this option to appear, enter the different reasons into the text box below, each one on its own line.',
 			'textarea',
 			'',
 		),
 		'propercfp_captcha_field' => array(
 			'Add a math CAPTCHA',
-			'propercfp_captcha_field',
 			'Checking this box will add a math CAPTCHA to the form to discourage spam',
 			'checkbox',
 			'',
@@ -73,20 +67,25 @@ function proper_content_plugin_options() {
 		'head2' => array(
 			'Form processing options',
 			'',
-			'',
 			'title',
 			'',
 		),
 		'propercfp_email' => array(
 			'Default contact submission email',
-			'propercfp_email',
 			'Email to use for the sender and receiver of the contact form',
 			'text',
 			get_bloginfo('admin_email')
 		),
+		'propercfp_reply_to_admin' => array(
+			'Use the email address above as notification sender',
+			'When this is off, the for submitter\'s email is used to send the notification to the email above, making it
+			easy to reply directly.	This might cause your emails to be caught by your spam filter, though. If you are
+			having trouble receiving emails from form submissions, try turning this on.',
+			'checkbox',
+			'',
+		),
 		'propercfp_result_url' => array(
 			'"Thank You" URL',
-			'propercfp_result_url',
 			'Select the post-submit page for all forms submitted',
 			'select',
 			'',
@@ -94,28 +93,24 @@ function proper_content_plugin_options() {
 		),
 		'propercfp_css' => array(
 			'Add styles to the site',
-			'propercfp_css',
 			'Checking this box will add styles to the form. By default, this is off so you can add your own styles.',
 			'checkbox',
 			'',
 		),
 		'propercfp_store' => array(
 			'Store submissions in the database',
-			'propercfp_store',
 			'Should the submissions be stored in the admin area? If chosen, contact form submissions will be saved in Contacts on the left (appears after this option is activated).',
 			'checkbox',
 			'',
 		),
 		'propercfp_blacklist' => array(
 			'Use the comments blacklist to restrict submissions',
-			'propercfp_blacklist',
 			'Should form submission IP and email addresses be compared against the Comment Blacklist, found in <strong>wp-admin > Settings > Discussion > Comment Blacklist?</strong>',
 			'checkbox',
 			'yes',
 		),
 		'propercfp_confirm_email' => array(
 			'Send email confirmation to form submitter',
-			'propercfp_confirm_email',
 			'Adding text here will send an email to the form submitter. The email uses the "Text to show when form is submitted..." field below as the subject line. Plain text only here, no HTML.',
 			'textarea',
 			'',
@@ -123,62 +118,53 @@ function proper_content_plugin_options() {
 		'head3' => array(
 			'Text overrides',
 			'',
-			'',
 			'title',
 			'',
 		),
 		'propercfp_label_name' => array(
 			'Name field label',
-			'propercfp_label_name',
 			'',
 			'text',
 			'Your full name'
 		),
 		'propercfp_label_email' => array(
 			'Email field label',
-			'propercfp_label_email',
 			'',
 			'text',
 			'Your email address'
 		),
 		'propercfp_label_phone' => array(
 			'Phone field label<br />(if activated above)',
-			'propercfp_label_phone',
 			'',
 			'text',
 			'Your phone number'
 		),
 		'propercfp_label_reason' => array(
 			'Reason for contacting label<br />(if activated above)',
-			'propercfp_label_reason',
 			'',
 			'text',
 			'Reason for contacting'
 		),
 		'propercfp_label_comment' => array(
 			'Comment field label',
-			'propercfp_label_comment',
 			'',
 			'text',
 			'Question or comment'
 		),
 		'propercfp_label_math' => array(
 			'Math CAPTCHA label<br />(if activated above)',
-			'propercfp_label_math',
 			'',
 			'text',
 			'Solve this equation: '
 		),
 		'propercfp_label_submit_btn' => array(
 			'Submit button text',
-			'propercfp_label_submit_btn',
 			'',
 			'text',
 			'Submit'
 		),
 		'propercfp_label_submit' => array(
 			'Successful form submission text',
-			'propercfp_label_submit',
 			'This text is used on the page if no "Thank You" URL is set above. This is also used as the confirmation email title, if one is set to send out.',
 			'text',
 			'Thank you for your contact!'
@@ -192,7 +178,6 @@ function proper_content_plugin_options() {
 		),
 			'propercfp_html5_no_validate' => array(
 			'Use HTML5 validation',
-			'propercfp_html5_no_validate',
 			'',
 			'checkbox',
 			'yes'
@@ -200,41 +185,35 @@ function proper_content_plugin_options() {
 		'head5' => array (
 			'Error Messages',
 			'',
-			'',
 			'title',
 			'',
 		),
 		'propercfp_label_err_name' => array(
 			'Error message if name required and missing',
-			'propercfp_label_err_name',
 			'',
 			'text',
 			'Enter your name'
 		),
 		'propercfp_label_err_email' => array(
 			'Error message if E-mail required and missing',
-			'propercfp_label_err_email',
 			'',
 			'text',
 			'Enter a valid email'
 		),
 		'propercfp_label_err_phone' => array(
 			'Error message if phone required and missing',
-			'propercfp_label_err_phone',
 			'',
 			'text',
 			'Please enter a phone number'
 		),
 		'propercfp_label_err_no_content' => array(
 			'Error message if post content is missing',
-			'propercfp_label_err_no_content',
 			'',
 			'text',
 			'Enter your question or comment'
 		),
 		'propercfp_label_err_captcha' => array(
 			'Error message for math CAPTCHA if activated',
-			'propercfp_label_err_captcha',
 			'',
 			'text',
 			'Check your math ...'
@@ -248,7 +227,7 @@ function cfp_add_admin() {
 	get_currentuserinfo();
 
 	$propercfp_options = get_option( 'propercfp_settings_array' );
-	$plugin_options = proper_content_plugin_options();
+	$plugin_options = proper_contact_plugin_options();
 
 	if (
 		// On the right page
@@ -262,12 +241,12 @@ function cfp_add_admin() {
 		wp_verify_nonce( $_POST['proper_nonce'], $current_user->user_email )
 	) {
 
-		foreach ($plugin_options as $opt) :
-			if (isset($_REQUEST[$opt[1]])) {
-				$opt_data = filter_var($_REQUEST[$opt[1]], FILTER_SANITIZE_STRING);
-				$propercfp_options[$opt[1]] = $opt_data;
+		foreach ($plugin_options as $key => $opt) :
+			if (isset($_REQUEST[$key])) {
+				$opt_data = filter_var($_REQUEST[$key], FILTER_SANITIZE_STRING);
+				$propercfp_options[$key] = $opt_data;
 			} else {
-				$propercfp_options[$opt[1]] = '';
+				$propercfp_options[$key] = '';
 			}
 		endforeach;
 
@@ -296,7 +275,7 @@ function proper_contact_admin() {
 	get_currentuserinfo();
 
 	$propercfp_options = get_option( 'propercfp_settings_array' );
-	$plugin_options    = proper_content_plugin_options();
+	$plugin_options    = proper_contact_plugin_options();
 		?>
 	
 		<div class="wrap" id="proper-contact-options">
@@ -313,12 +292,12 @@ function proper_contact_admin() {
 						<?php _e( 'How to use the', 'proper-contact' ) ?>
 						<?php _e( 'PROPER Contact Form', 'proper-contact' ) ?>:</h4>
 
-					<p><?php
-					_e(
-						'Simply configure the form below, save your changes, then add
-						<code>[proper_contact_form]</code> to any contact page.<br>
-						If you\'re adding this to a theme file, add	<code>&lt;?php echo do_shortcode( \'[proper_contact_form]\' ) ?&gt;</code >.', 'proper-contact' )
-					?></p>
+					<p>Simply configure the form below, save your changes, then add
+						<code>[proper_contact_form]</code> to any page or post. You can also add a
+						<a href="<?php echo admin_url( 'widgets.php' ); ?>">widget</a>.<br>
+						If you're adding this to a theme file, add
+						<code>&lt;?php echo do_shortcode( '[proper_contact_form]' ) ?&gt;</code>
+					</p>
 				</div>
 			</div>
 
@@ -339,7 +318,7 @@ function proper_contact_admin() {
 					</tr>
 
 			<?php 
-			foreach ($plugin_options as $value) :
+			foreach ($plugin_options as $key =>$value) :
 				
 				// More clear option names
 				
@@ -347,22 +326,22 @@ function proper_contact_admin() {
 				$opt_name = $value[0];
 				
 				// Machine name as ID
-				$opt_id = $value[1];
+				$opt_id = $key;
 				
 				// Description for this field, aka help text
-				$opt_desc = $value[2];
+				$opt_desc = $value[1];
 				
 				// Input type, set to callback to use a function to build the input
-				$opt_type = $value[3];
+				$opt_type = $value[2];
 				
 				// Default value
-				$opt_default = $value[4];
+				$opt_default = $value[3];
 			
 				// Value currently saved
 				$opt_val = isset($propercfp_options[$opt_id]) ? $propercfp_options[$opt_id] : $opt_default;
 	
 				// Options if checkbox, select, or radio
-				$opt_options = empty($value[5]) ? array() : $value[5];
+				$opt_options = empty($value[4]) ? array() : $value[4];
 		
 				// Allow for blocks of HTML to be displayed within the settings form
 				if ($opt_type == 'html') :
@@ -554,14 +533,13 @@ function proper_contact_admin() {
  */
 function proper_contact_form_settings_init() {
 	
-	global $plugin_options;
-	
 	if (!get_option('propercfp_settings_array')) {
 		
 		$new_opt = array();
 		
-		foreach ($plugin_options as $opt)				
-			$new_opt[$opt[1]] = $opt[4];
+		foreach ( proper_contact_plugin_options() as $key => $opt) {
+			$new_opt[$key] = $opt[3];
+		}
 			
 		update_option( 'propercfp_settings_array', $new_opt);
 	
@@ -580,4 +558,5 @@ function proper_contact_form_plugin_links( $links ) {
 
 	return $links;
 }
-add_filter( 'plugin_action_links_proper-contact-form/proper-contact-form.php', 'proper_contact_form_plugin_links', 10, 2 );
+add_filter( 'plugin_action_links_proper-contact-form/proper-contact-form.php',
+	'proper_contact_form_plugin_links', 10, 2 );

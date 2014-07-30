@@ -1,0 +1,5 @@
+@charset "UTF-8";
+/* CSS Document */
+#proper-contact-options {width: 80%; min-width: 400px}
+#proper-contact-options th, #proper-contact-options td {display: table-cell; border-bottom: 1px solid #f1f1f1; padding: 10px;}
+#proper-contact-options th {text-align: left; font-size: 1.1em; font-weight: bold;}

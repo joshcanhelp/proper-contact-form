@@ -4,8 +4,8 @@
 Plugin Name: PROPER Contact Form
 Plugin URI: http://theproperweb.com/shipped/wp/proper-contact-form
 Description: A better contact form processor
-Version: 0.9.8.2
-Author: PROPER Development
+Version: 0.9.8.3
+Author: PROPER Web Development
 Author URI: http://theproperweb.com
 License: GPL2
 */
@@ -17,7 +17,7 @@ if ( ! function_exists( 'add_action' ) ) {
 }
 
 // Important constants
-define( 'PROPER_CONTACT_VERSION', '0.9.8.1' );
+define( 'PROPER_CONTACT_VERSION', '0.9.8.3' );
 define( 'PROPER_CONTACT_URL', plugin_dir_url( __FILE__ ) );
 
 // Required helper functions
@@ -47,8 +47,10 @@ function proper_contact_form( $atts, $content = NULL ) {
 
 	// FormBuilder
 	// https://github.com/joshcanhelp/php-form-builder
-	require_once( dirname( __FILE__ ) . '/inc/FormBuilder.php' );
-	$form = new ThatFormBuilder;
+	if ( !class_exists('PhpFormBuilder')) {
+		require_once( dirname( __FILE__ ) . '/inc/PhpFormBuilder.php' );
+	}
+	$form = new PhpFormBuilder;
 
 	// TODO: make a better ID system
 	$form->set_att( 'id', 'proper_contact_form_' . ( get_the_id() ? get_the_id() : 1 ) );
@@ -204,13 +206,15 @@ function proper_contact_form( $atts, $content = NULL ) {
 	}
 
 	// Submit button
+	$submit_btn_text = stripslashes( sanitize_text_field( proper_contact_get_key( 'propercfp_label_submit_btn' ) ) );
 	$form->add_input(
-		stripslashes( sanitize_text_field( proper_contact_get_key( 'propercfp_label_submit_btn' ) ) ),
+		$submit_btn_text,
 		array(
 			'type'       => 'submit',
 			'wrap_class' => array(
 				'form_field_wrap', 'submit_wrap'
-			)
+			),
+			'value' => $submit_btn_text
 		),
 		'submit'
 	);
@@ -400,7 +404,7 @@ IP search: http://whatismyipaddress.com/ip/$contact_ip \n\n";
 	// No errors? Go ahead and process the contact
 	if ( empty( $_SESSION['cfp_contact_errors'] ) ) {
 
-		$site_email = proper_contact_get_key( 'propercfp_email' );
+		$site_email = sanitize_email( proper_contact_get_key( 'propercfp_email' ) );
 		$site_name  = htmlspecialchars_decode( get_bloginfo( 'name' ) );
 
 		// No name? Use the email address, if one is present
@@ -410,13 +414,19 @@ IP search: http://whatismyipaddress.com/ip/$contact_ip \n\n";
 
 		// Need an email address for the email notification
 		$send_from = ! empty( $contact_email ) ? $contact_email : $site_email;
+		if ( proper_contact_get_key( 'propercfp_reply_to_admin' ) == 'yes' ) {
+			$send_from = $site_email;
+		}
 
 		// Sent an email notification to the correct address
 		$headers   = array();
-		$headers[] = "From: $contact_name <$send_from>";
-		$headers[] = "Reply-To: $send_from";
-		wp_mail( $site_email, 'Contact on ' . $site_name, $body, $headers );
 
+		$headers[] = "From: $contact_name <$send_from>";
+		$headers[] = "Reply-To: $contact_name <$send_from>";
+
+		wp_mail( $site_email, 'Contact on ' . $site_name, $body, $headers );
+		
+		
 		// Should a confirm email be sent?
 		$confirm_body = stripslashes( trim( proper_contact_get_key( 'propercfp_confirm_email' ) ) );
 		if ( ! empty( $confirm_body ) && ! empty( $contact_email ) ) {

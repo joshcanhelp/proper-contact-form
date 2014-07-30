@@ -1,10 +1,10 @@
 === PROPER Contact Form ===
 Contributors: properwp, joshcanhelp
-Donate link: http://www.theproperweb.com/code/wp/proper-contact-form/
+Donate link: http://theproperweb.com/product/proper-contact-form/
 Tags: contact, contact form, contact form widget
 Requires at least: 3.0
-Tested up to: 3.9.1
-Stable tag: 0.9.8.2
+Tested up to: 4.0
+Stable tag: 0.9.8.3
 
 Creates a flexible, secure contact form on your WP site
 
@@ -47,6 +47,12 @@ Activating the Proper Contact Form plugin is just like any other plugin. If you'
 7. To add this form to any page or post, just copy/paste or type "[proper_contact_form]" into the page or post content and save. The form should appear on that page
 
 == Changelog ==
+
+= 0.9.8.3 =
+* Upgraded PhpFormBuilder class to latest version; added check to make sure the class doesn't exist
+* Added an option to send notification emails from a different address
+* Removed id array element, using aray key instead
+
 
 = 0.9.8.2 =
 * Fixed no-settings error on install
