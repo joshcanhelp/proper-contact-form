@@ -288,7 +288,8 @@ function cfp_process_contact() {
 
 	// Start the body of the contact email
 	$body = "
-*** " . __( 'Contact form submission on', 'proper-contact' ) . " " . get_bloginfo( 'name' ) . " (" . site_url() . ") *** \n\n";
+*** " . __( 'Contact form submission on', 'proper-contact' ) . " " .
+		get_bloginfo( 'name' ) . " (" . site_url() . ") *** \n\n";
 
 	// Sanitize and validate name
 	$contact_name = isset( $_POST['contact-name'] ) ?
@@ -298,16 +299,15 @@ function cfp_process_contact() {
 	// Do we require an email address?
 	if ( proper_contact_get_key( 'propercfp_name_field' ) === 'req' && empty( $contact_name ) ) {
 		$_SESSION['cfp_contact_errors']['contact-name'] = proper_contact_get_key( 'propercfp_label_err_name' );
-		// If not required and empty, leave it out
 	}
+	// If not required and empty, leave it out
 	elseif ( ! empty( $contact_name ) ) {
 		$body .= stripslashes( proper_contact_get_key( 'propercfp_label_name' ) ) . ": $contact_name \r";
 	}
 
 	// Sanitize and validate email
 	$contact_email = isset( $_POST['contact-email'] ) ?
-			sanitize_email( $_POST['contact-email'] ) :
-			'';
+			sanitize_email( $_POST['contact-email'] ) : '';
 
 	// If required, is it valid?
 	if (
@@ -315,8 +315,8 @@ function cfp_process_contact() {
 			! filter_var( $contact_email, FILTER_VALIDATE_EMAIL )
 	) {
 		$_SESSION['cfp_contact_errors']['contact-email'] = proper_contact_get_key( 'propercfp_label_err_email' );
-		// If not required and empty, leave it out
 	}
+	// If not required and empty, leave it out
 	elseif ( ! empty( $contact_email ) ) {
 		$body .= stripslashes( proper_contact_get_key( 'propercfp_label_email' ) )
 				. ": $contact_email \r"

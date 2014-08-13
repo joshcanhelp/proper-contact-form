@@ -53,7 +53,6 @@ Activating the Proper Contact Form plugin is just like any other plugin. If you'
 * Added an option to send notification emails from a different address
 * Removed id array element, using aray key instead
 
-
 = 0.9.8.2 =
 * Fixed no-settings error on install
 

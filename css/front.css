@@ -3,7 +3,7 @@
 
 .proper_contact_form_wrap {max-width: 350px;}
 
-.proper_contact_form {padding: 12px; box-shadow: 0 1px 5px #aaa; border-radius: 6px; background: #f9f9f9; margin-bottom: 20px;}
+.proper_contact_form {padding: 12px; box-shadow: 0 1px 5px #aaa; border-radius: 6px; background: #f9f9f9; margin: 2px 0 20px;}
 
 	.proper_contact_form .form_field_wrap {padding: 6px; margin: 0 0 8px}
 
