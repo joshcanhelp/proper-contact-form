@@ -260,7 +260,7 @@ function cfp_add_admin() {
 		'options-general.php',
 		__( 'PROPER Contact settings', 'proper-contact' ),
 		__( 'PROPER Contact', 'proper-contact' ),
-		'edit_themes',
+		'manage_options',
 		'pcfp-admin',
 		'proper_contact_admin' );
 
