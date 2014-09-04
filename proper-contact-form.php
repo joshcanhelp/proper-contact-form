@@ -4,7 +4,7 @@
 Plugin Name: PROPER Contact Form
 Plugin URI: http://theproperweb.com/shipped/wp/proper-contact-form
 Description: A better contact form processor
-Version: 0.9.8.4
+Version: 0.9.8.5
 Author: PROPER Web Development
 Author URI: http://theproperweb.com
 License: GPL2
@@ -17,7 +17,7 @@ if ( ! function_exists( 'add_action' ) ) {
 }
 
 // Important constants
-define( 'PROPER_CONTACT_VERSION', '0.9.8.4' );
+define( 'PROPER_CONTACT_VERSION', '0.9.8.5' );
 define( 'PROPER_CONTACT_URL', plugin_dir_url( __FILE__ ) );
 
 // Required helper functions
@@ -411,7 +411,7 @@ IP search: http://whatismyipaddress.com/ip/$contact_ip \n\n";
 		$site_recipients = sanitize_text_field( proper_contact_get_key( 'propercfp_email_recipients' ) );
 		$site_recipients = explode(',', $site_recipients);
 		$site_recipients = array_map( 'trim', $site_recipients );
-		//$site_recipients = array_map( 'filter_var', $site_recipients, array( FILTER_VALIDATE_EMAIL ) );
+		$site_recipients = array_map( 'filter_var', $site_recipients, array( FILTER_VALIDATE_EMAIL ) );
 
 		// No name? Use the submitter email address, if one is present
 		if ( empty( $contact_name ) ) {

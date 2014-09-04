@@ -76,14 +76,6 @@ function proper_contact_plugin_options() {
 			'email',
 			get_bloginfo( 'admin_email' )
 		),
-		'propercfp_email_recipients'     => array(
-			'Contact submission recipients',
-			'Email address(es) to receive contact submission notifications. You can separate multiple emails with a comma.',
-			'text',
-			proper_contact_get_key( 'propercfp_email' ) ?
-				proper_contact_get_key( 'propercfp_email' ) :
-				get_bloginfo( 'admin_email' )
-		),
 		'propercfp_reply_to_admin'       => array(
 			'Use the email address above as notification sender',
 			'When this is off, the for submitter\'s email is used to send the notification to the email above, making it
@@ -91,6 +83,14 @@ function proper_contact_plugin_options() {
 			having trouble receiving emails from form submissions, try turning this on.',
 			'checkbox',
 			'',
+		),
+		'propercfp_email_recipients' => array(
+			'Contact submission recipients',
+			'Email address(es) to receive contact submission notifications. You can separate multiple emails with a comma.',
+			'text',
+			proper_contact_get_key( 'propercfp_email' ) ?
+				proper_contact_get_key( 'propercfp_email' ) :
+				get_bloginfo( 'admin_email' )
 		),
 		'propercfp_result_url'           => array(
 			'"Thank You" URL',
