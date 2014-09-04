@@ -407,26 +407,33 @@ IP search: http://whatismyipaddress.com/ip/$contact_ip \n\n";
 		$site_email = sanitize_email( proper_contact_get_key( 'propercfp_email' ) );
 		$site_name  = htmlspecialchars_decode( get_bloginfo( 'name' ) );
 
-		// No name? Use the email address, if one is present
+		// Notification recipients
+		$site_recipients = sanitize_text_field( proper_contact_get_key( 'propercfp_email_recipients' ) );
+		$site_recipients = explode(',', $site_recipients);
+		$site_recipients = array_map( 'trim', $site_recipients );
+		//$site_recipients = array_map( 'filter_var', $site_recipients, array( FILTER_VALIDATE_EMAIL ) );
+
+		// No name? Use the submitter email address, if one is present
 		if ( empty( $contact_name ) ) {
 			$contact_name = ! empty( $contact_email ) ? $contact_email : '[None given]';
 		}
 
 		// Need an email address for the email notification
-		$send_from = ! empty( $contact_email ) ? $contact_email : $site_email;
 		if ( proper_contact_get_key( 'propercfp_reply_to_admin' ) == 'yes' ) {
 			$send_from = $site_email;
+			$send_from_name = $site_name;
+		} else {
+			$send_from = ! empty( $contact_email ) ? $contact_email : $site_email;
+			$send_from_name = $contact_name;
 		}
 
 		// Sent an email notification to the correct address
 		$headers   = array();
+		$headers[] = "From: $send_from_name <$send_from>";
+		$headers[] = "Reply-To: $send_from_name <$send_from>";
 
-		$headers[] = "From: $contact_name <$send_from>";
-		$headers[] = "Reply-To: $contact_name <$send_from>";
+		wp_mail( $site_recipients, 'Contact on ' . $site_name, $body, $headers );
 
-		wp_mail( $site_email, 'Contact on ' . $site_name, $body, $headers );
-		
-		
 		// Should a confirm email be sent?
 		$confirm_body = stripslashes( trim( proper_contact_get_key( 'propercfp_confirm_email' ) ) );
 		if ( ! empty( $confirm_body ) && ! empty( $contact_email ) ) {
@@ -436,12 +443,12 @@ IP search: http://whatismyipaddress.com/ip/$contact_ip \n\n";
 			$confirm_body = html_entity_decode( $confirm_body );
 			$confirm_body = str_replace( '&#39;', "'", $confirm_body );
 
-			// Send the email
-			$headers   = array();
-			$headers[] = "From: $site_name <$site_email>";
-			$headers[] = "Reply-To: $site_email";
-			wp_mail( $contact_email, proper_contact_get_key( 'propercfp_label_submit' ) . ' - ' . $site_name,
-				$confirm_body, $headers );
+			wp_mail(
+				$contact_email,
+				proper_contact_get_key( 'propercfp_label_submit' ) . ' - ' . $site_name,
+				$confirm_body,
+				$headers
+			);
 		}
 
 		// Should the entry be stored in the DB?

@@ -71,10 +71,18 @@ function proper_contact_plugin_options() {
 			'',
 		),
 		'propercfp_email'                => array(
-			'Default contact submission email',
-			'Email to use for the sender and receiver of the contact form',
-			'text',
+			'Contact notification sender email',
+			'Email to use for the sender of the contact form emails both to the recipients below and the contact form submitter (if this is activated below)',
+			'email',
 			get_bloginfo( 'admin_email' )
+		),
+		'propercfp_email_recipients'     => array(
+			'Contact submission recipients',
+			'Email address(es) to receive contact submission notifications. You can separate multiple emails with a comma.',
+			'text',
+			proper_contact_get_key( 'propercfp_email' ) ?
+				proper_contact_get_key( 'propercfp_email' ) :
+				get_bloginfo( 'admin_email' )
 		),
 		'propercfp_reply_to_admin'       => array(
 			'Use the email address above as notification sender',
@@ -231,14 +239,14 @@ function cfp_add_admin() {
 
 	if (
 		// On the right page
-			array_key_exists( 'page', $_GET ) &&
-			$_GET['page'] === 'pcfp-admin' &&
-			// We're saving options
-			array_key_exists( 'action', $_REQUEST ) &&
-			$_REQUEST['action'] == 'save' &&
-			// This action is authorized
-			current_user_can( 'manage_options' ) &&
-			wp_verify_nonce( $_POST['proper_nonce'], $current_user->user_email )
+		array_key_exists( 'page', $_GET ) &&
+		$_GET['page'] === 'pcfp-admin' &&
+		// We're saving options
+		array_key_exists( 'action', $_REQUEST ) &&
+		$_REQUEST['action'] == 'save' &&
+		// This action is authorized
+		current_user_can( 'manage_options' ) &&
+		wp_verify_nonce( $_POST['proper_nonce'], $current_user->user_email )
 	) {
 
 		foreach ( $plugin_options as $key => $opt ) :
@@ -288,12 +296,12 @@ function proper_contact_admin() {
 
 	<div class="postbox" style="margin-top: 20px; padding: 0 20px">
 
-			<p>Simply configure the form below, save your changes, then add
-				<code>[proper_contact_form]</code> to any page or post. You can also add a
-				<a href="<?php echo admin_url( 'widgets.php' ); ?>">widget</a>.<br>
-				If you're adding this to a theme file, add
-				<code>&lt;?php echo do_shortcode( '[proper_contact_form]' ) ?&gt;</code>
-			</p>
+		<p>Simply configure the form below, save your changes, then add
+			<code>[proper_contact_form]</code> to any page or post. You can also add a
+			<a href="<?php echo admin_url( 'widgets.php' ); ?>">widget</a>.<br>
+			If you're adding this to a theme file, add
+			<code>&lt;?php echo do_shortcode( '[proper_contact_form]' ) ?&gt;</code>
+		</p>
 
 	</div>
 
@@ -305,7 +313,50 @@ function proper_contact_admin() {
 		</div>
 	<?php endif ?>
 
-	<form method="post">
+	<div class="proper_contact_promo_sidebar">
+		<p>I hope you are using and loving the PROPER Contact Form! This plugin was brought to you by:</p>
+		<p>
+			<a href="http://theproperweb.com/?ref=pcf-settings" target="_blank">
+				<img src="<?php echo PROPER_CONTACT_URL . 'images/proper-logo.png' ?>" class="aligncenter">
+			</a>
+		</p>
+		<p>If you use and enjoy the plugin, you can show support by
+			<a href="http://theproperweb.com/product/proper-contact-form/" target="_blank">donating</a> or
+			<a href="https://wordpress.org/support/view/plugin-reviews/proper-contact-form?filter=5#postform" target="_blank">giving it a positive review</a> on WordPress.org. If you're having any trouble,
+			<a href="https://wordpress.org/support/plugin/proper-contact-form" target="_blank">post a support request here</a>.
+		</p>
+		<hr>
+		<p>Like what you see and want more?</p>
+
+		<p><strong>Premium Themes and Plugins:</strong></p>
+		<ul>
+			<li><a href="http://wpdrudge.com/?ref=pcf-settings" target="_blank">WP-Drudge curation theme</a></li>
+			<li><a href="http://www.wpwritersblock.com/?ref=pcf-settings" target="_blank">WP Writer's Block writer's theme</a></li>
+			<li><a href="http://theproperweb.com/product/google-news-wordpress/?ref=pcf-settings" target="_blank">Google News for WordPress</a></li>
+		</ul>
+		<p><strong>Free Plugins:</strong></p>
+		<ul>
+			<li><a href="https://wordpress.org/plugins/proper-widgets/" target="_blank">PROPER Widgets</a></li>
+			<li><a href="https://wordpress.org/plugins/proper-shortcodes/" target="_blank">PROPER Shortcodes</a></li>
+		</ul>
+		<hr>
+		<p>
+			By the way, I'm Josh, the developer of this plugin. Nice to meet you!</p>
+		<p>
+			<a href="https://twitter.com/joshcanhelp" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @joshcanhelp</a>
+			<script>!function (d, s, id) {
+					var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+					if (!d.getElementById(id)) {
+						js = d.createElement(s);
+						js.id = id;
+						js.src = p + '://platform.twitter.com/widgets.js';
+						fjs.parentNode.insertBefore(js, fjs);
+					}
+				}(document, 'script', 'twitter-wjs');</script></p>
+
+	</div>
+
+	<form method="post" class="proper_contact_settings_form">
 	<table class="form-table">
 	<tr>
 		<td>
@@ -362,9 +413,9 @@ function proper_contact_admin() {
 				</th>
 			</tr>
 
-			<?php
+		<?php
 
-			// Displays correct inputs for "text" type
+		// Displays correct inputs for "text" type
 		elseif ( $opt_type == 'text' || $opt_type == 'number' || $opt_type == 'email' || $opt_type == 'url' ) :
 			?>
 
@@ -373,7 +424,7 @@ function proper_contact_admin() {
 					<label for="<?php echo $opt_id ?>"><?php _e( $opt_name, 'proper-contact' ) ?>:</label>
 				</th>
 				<td>
-					<input name="<?php echo $opt_id ?>" id="<?php echo $opt_id ?>" type="<?php echo $opt_type ?>" value="<?php echo stripslashes( $opt_val ) ?>" class="regular-text">
+					<input name="<?php echo $opt_id ?>" id="<?php echo $opt_id ?>" type="<?php echo $opt_type ?>" value="<?php echo stripslashes( $opt_val ) ?>" class="widefat">
 
 					<p class="description"><?php _e( $opt_desc, 'proper-contact' ) ?></p>
 
@@ -553,3 +604,19 @@ function proper_contact_form_plugin_links( $links ) {
 
 add_filter( 'plugin_action_links_proper-contact-form/proper-contact-form.php',
 	'proper_contact_form_plugin_links', 10, 2 );
+
+/**
+ * Enqueue CSS and JS needed in the admin
+ */
+function proper_contact_admin_css_js() {
+	global $pagenow;
+
+	if (
+		( $pagenow == 'options-general.php' || $pagenow == 'admin.php' )
+		&& isset( $_GET['page'] ) && $_GET['page'] == 'pcfp-admin'
+	) {
+		wp_enqueue_style( 'proper-contact', PROPER_CONTACT_URL . 'css/wp-admin.css' );
+	}
+}
+
+add_action( 'admin_enqueue_scripts', 'proper_contact_admin_css_js' );
