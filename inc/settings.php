@@ -72,15 +72,13 @@ function proper_contact_plugin_options() {
 		),
 		'propercfp_email'                => array(
 			'Contact notification sender email',
-			'Email to use for the sender of the contact form emails both to the recipients below and the contact form submitter (if this is activated below)',
+			'Email to use for the sender of the contact form emails both to the recipients below and the contact form submitter (if this is activated below). The domain for this email address should match your site\'s domain.',
 			'email',
 			get_bloginfo( 'admin_email' )
 		),
 		'propercfp_reply_to_admin'       => array(
 			'Use the email address above as notification sender',
-			'When this is off, the for submitter\'s email is used to send the notification to the email above, making it
-			easy to reply directly.	This might cause your emails to be caught by your spam filter, though. If you are
-			having trouble receiving emails from form submissions, try turning this on.',
+			'When this is on, the notification emails sent from your site will come from the email address above. When this is off, the emails will come from the form submitter, making it easy to reply. If you are not receiving notifications from the site, then turn this option off as your email server might be marking them as spam.',
 			'checkbox',
 			'',
 		),

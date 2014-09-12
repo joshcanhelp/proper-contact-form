@@ -411,7 +411,8 @@ IP search: http://whatismyipaddress.com/ip/$contact_ip \n\n";
 		$site_recipients = sanitize_text_field( proper_contact_get_key( 'propercfp_email_recipients' ) );
 		$site_recipients = explode(',', $site_recipients);
 		$site_recipients = array_map( 'trim', $site_recipients );
-		$site_recipients = array_map( 'filter_var', $site_recipients, array( FILTER_VALIDATE_EMAIL ) );
+		$site_recipients = array_map( 'sanitize_email', $site_recipients );
+		$site_recipients = implode( ',', $site_recipients );
 
 		// No name? Use the submitter email address, if one is present
 		if ( empty( $contact_name ) ) {
@@ -428,9 +429,7 @@ IP search: http://whatismyipaddress.com/ip/$contact_ip \n\n";
 		}
 
 		// Sent an email notification to the correct address
-		$headers   = array();
-		$headers[] = "From: $send_from_name <$send_from>";
-		$headers[] = "Reply-To: $send_from_name <$send_from>";
+		$headers   = "From: $send_from_name <$send_from>\r\nReply-To: $send_from_name <$send_from>";
 
 		wp_mail( $site_recipients, 'Contact on ' . $site_name, $body, $headers );
 
@@ -442,6 +441,8 @@ IP search: http://whatismyipaddress.com/ip/$contact_ip \n\n";
 			$confirm_body = htmlspecialchars_decode( $confirm_body );
 			$confirm_body = html_entity_decode( $confirm_body );
 			$confirm_body = str_replace( '&#39;', "'", $confirm_body );
+
+			$headers = "From: $site_name <$site_email>\r\nReply-To: $site_name <$site_email>";
 
 			wp_mail(
 				$contact_email,
