@@ -15,3 +15,8 @@ Features in the works:
 
 - Additional style options
 - Ability to add custom fields to the form
+- Figure out a better 
+
+Pull requests welcome!
+
+[WordPress.org plugin page](https://wordpress.org/plugins/proper-contact-form/)

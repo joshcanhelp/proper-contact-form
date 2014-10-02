@@ -2,9 +2,9 @@
 
 /*
 Plugin Name: PROPER Contact Form
-Plugin URI: http://theproperweb.com/shipped/wp/proper-contact-form
+Plugin URI: http://theproperweb.com/product/proper-contact-form/
 Description: A better contact form processor
-Version: 0.9.8.5
+Version: 0.9.8.6
 Author: PROPER Web Development
 Author URI: http://theproperweb.com
 License: GPL2
@@ -188,7 +188,7 @@ function proper_contact_form( $atts, $content = NULL ) {
 			array(
 				'required'    => TRUE,
 				'wrap_class'  => $wrap_classes,
-				'use_request' => false
+				'request_populate' => false
 			),
 			'math-captcha'
 		);
@@ -198,7 +198,7 @@ function proper_contact_form( $atts, $content = NULL ) {
 			array(
 				'type'        => 'hidden',
 				'value'       => $sum,
-				'use_request' => FALSE
+				'request_populate' => FALSE
 			),
 			'math-captcha-sum'
 		);

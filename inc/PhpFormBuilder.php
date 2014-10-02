@@ -111,16 +111,17 @@ class PhpFormBuilder {
 			'min' => '',
 			'max' => '',
 			'step' => '',
-			'autofocus' => false,
-			'checked' => false,
-			'required' => false,
-			'add_label' => true,
+			'autofocus' => FALSE,
+			'checked' => FALSE,
+			'required' => FALSE,
+			'add_label' => TRUE,
 			'options' => array(),
 			'wrap_tag' => 'div',
 			'wrap_class' => array('form_field_wrap'),
 			'wrap_id' => '',
-			'wrap_style' => ''
-		
+			'wrap_style' => '',
+			'request_populate' => TRUE
+
 		);
 		
 		// Combined defaults and arguments
@@ -188,7 +189,8 @@ class PhpFormBuilder {
 			$this->add_input('WordPress nonce', array(
 				'value' => wp_create_nonce($this->form['add_nonce']),
 				'add_label' => false,
-				'type' => 'hidden'
+				'type' => 'hidden',
+				'request_populate' => FALSE
 			));
 		
 		foreach ($this->inputs as $key => $val) :
@@ -196,7 +198,7 @@ class PhpFormBuilder {
 			$min_max_range = $element = $end = $attr = $field = $label_html = '';
 			
 			// Set the field value to incoming
-			$val['value'] = isset($_REQUEST[$val['name']]) && !empty($_REQUEST[$val['name']]) ? 
+			$val['value'] = !empty($_REQUEST[$val['name']]) && $val['request_populate'] ?
 				$_REQUEST[$val['name']] : 
 				$val['value'];
 			
