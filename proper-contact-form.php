@@ -17,7 +17,7 @@ if ( ! function_exists( 'add_action' ) ) {
 }
 
 // Important constants
-define( 'PROPER_CONTACT_VERSION', '0.9.8.5' );
+define( 'PROPER_CONTACT_VERSION', '0.9.8.6' );
 define( 'PROPER_CONTACT_URL', plugin_dir_url( __FILE__ ) );
 
 // Required helper functions
@@ -50,7 +50,7 @@ function proper_contact_form( $atts, $content = NULL ) {
 	if ( !class_exists('PhpFormBuilder')) {
 		require_once( dirname( __FILE__ ) . '/inc/PhpFormBuilder.php' );
 	}
-	$form = new PhpFormBuilder;
+	$form = new PhpFormBuilder();
 
 	// TODO: make a better ID system
 	$form->set_att( 'id', 'proper_contact_form_' . ( get_the_id() ? get_the_id() : 1 ) );
@@ -184,7 +184,8 @@ function proper_contact_form( $atts, $content = NULL ) {
 
 		// Build the input with the correct label, options, and name
 		$form->add_input(
-			stripslashes( sanitize_text_field( proper_contact_get_key( 'propercfp_label_math' ) ) ) . " $num_1 + $num_2",
+			stripslashes( sanitize_text_field( proper_contact_get_key( 'propercfp_label_math' ) ) ) .
+				" $num_1 + $num_2",
 			array(
 				'required'    => TRUE,
 				'wrap_class'  => $wrap_classes,
@@ -198,7 +199,7 @@ function proper_contact_form( $atts, $content = NULL ) {
 			array(
 				'type'        => 'hidden',
 				'value'       => $sum,
-				'request_populate' => FALSE
+				'request_populate' => false
 			),
 			'math-captcha-sum'
 		);

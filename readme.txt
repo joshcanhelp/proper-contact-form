@@ -50,6 +50,7 @@ Activating the Proper Contact Form plugin is just like any other plugin. If you'
 
 = 0.9.8.6 =
 * Fixed the math captcha bug that required page reload
+* Updated to latest PhpFormBuilder include (0.8.6)
 
 = 0.9.8.5 =
 * Added a settings field for submission notification emails
