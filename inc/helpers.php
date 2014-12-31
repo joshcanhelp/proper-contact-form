@@ -4,7 +4,7 @@ if ( ! function_exists( 'proper_get_content_array' ) ) {
 	function proper_get_content_array( $type = 'page' ) {
 
 		$content = array(
-			'' => 'None'
+			'' => __( 'None', 'proper-contact' )
 		);
 
 		$items = get_posts( array(
@@ -53,7 +53,7 @@ if ( ! function_exists( 'proper_display_errors' ) ) {
 	function proper_display_errors( $errs ) {
 		$output = '
 	<div class="proper_error_box">
-		<h6>Please correct the following errors:</h6>
+		<h6>'. __( 'Please correct the following errors', 'proper-contact' ) . ':</h6>
 		<ul>';
 
 		foreach ( $errs as $err ) :

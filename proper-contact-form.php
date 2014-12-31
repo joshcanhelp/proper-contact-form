@@ -4,7 +4,7 @@
 Plugin Name: PROPER Contact Form
 Plugin URI: http://theproperweb.com/product/proper-contact-form/
 Description: A better contact form processor
-Version: 0.9.8.6
+Version: 0.9.9
 Author: PROPER Web Development
 Author URI: http://theproperweb.com
 License: GPL2
@@ -17,13 +17,23 @@ if ( ! function_exists( 'add_action' ) ) {
 }
 
 // Important constants
-define( 'PROPER_CONTACT_VERSION', '0.9.8.6' );
+define( 'PROPER_CONTACT_VERSION', '0.9.9' );
 define( 'PROPER_CONTACT_URL', plugin_dir_url( __FILE__ ) );
 
 // Required helper functions
 include_once( dirname( __FILE__ ) . '/inc/helpers.php' );
 include_once( dirname( __FILE__ ) . '/inc/settings.php' );
 include_once( dirname( __FILE__ ) . '/inc/widget.php' );
+
+/**
+ * WP init hook actions
+ */
+function proper_contact_action_init () {
+	// Translation ready
+	load_plugin_textdomain( 'proper-contact', FALSE, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+}
+
+add_action( 'init', 'proper_contact_action_init' );
 
 /**
  * Outputs the contact form or a confirmation message is submitted
@@ -153,6 +163,8 @@ function proper_contact_form( $atts, $content = NULL ) {
 		);
 	}
 
+	do_action( 'pcf_field_above_comment', $form );
+
 	// Comment field, required to be displayed
 	$wrap_classes = array( 'form_field_wrap', 'question_or_comment_wrap' );
 	if ( isset( $_SESSION['cfp_contact_errors']['question-or-comment'] ) ) {
@@ -167,6 +179,8 @@ function proper_contact_form( $atts, $content = NULL ) {
 		),
 		'question-or-comment'
 	);
+
+	do_action( 'pcf_field_below_comment', $form );
 
 	// Add a math CAPTCHA, if desired
 	if ( proper_contact_get_key( 'propercfp_captcha_field' ) ) {
@@ -205,6 +219,8 @@ function proper_contact_form( $atts, $content = NULL ) {
 		);
 
 	}
+
+	do_action( 'pcf_field_above_submit', $form );
 
 	// Submit button
 	$submit_btn_text = stripslashes( sanitize_text_field( proper_contact_get_key( 'propercfp_label_submit_btn' ) ) );
@@ -353,6 +369,8 @@ function cfp_process_contact() {
 		$body .= stripslashes( proper_contact_get_key( 'propercfp_label_reason' ) ) . ": $contact_reason \r";
 	}
 
+	$body = apply_filters( 'pcf_process_above_comment', $body );
+
 	// Sanitize and validate comments
 	$contact_comment = sanitize_text_field( trim( $_POST['question-or-comment'] ) );
 	if ( empty( $contact_comment ) ) {
@@ -363,6 +381,9 @@ function cfp_process_contact() {
 		$body .= "\n\n" . stripslashes( proper_contact_get_key( 'propercfp_label_comment' ) )
 				. ": " . stripslashes( $contact_comment ) . " \n\n";
 	}
+
+	$body = apply_filters( 'pcf_process_below_comment', $body );
+	$body = apply_filters( 'pcf_process_above_submit', $body );
 
 	// Check the math CAPTCHA, if present
 	if ( proper_contact_get_key( 'propercfp_captcha_field' ) ) {
@@ -455,19 +476,22 @@ IP search: http://whatismyipaddress.com/ip/$contact_ip \n\n";
 
 		// Should the entry be stored in the DB?
 		if ( proper_contact_get_key( 'propercfp_store' ) === 'yes' ) {
-			$new_post_id = wp_insert_post(
-				array(
-					'post_type'    => 'proper_contact',
-					'post_title'   => date( 'l, M j, Y', time() ) . ' by "' . $contact_name . '"',
-					'post_content' => $body,
-					'post_author'  => 1,
-					'post_status'  => 'private'
-				)
+
+			$insert_post_args = array(
+				'post_type'    => 'proper_contact',
+				'post_title'   => date( 'l, M j, Y', time() ) . ' by "' . $contact_name . '"',
+				'post_content' => $body,
+				'post_author'  => 1,
+				'post_status'  => 'private'
 			);
+			$insert_post_args = apply_filters( 'pcf_process_insert_post_args', $insert_post_args );
+			$new_post_id = wp_insert_post( $insert_post_args );
 
 			if ( isset( $contact_email ) && ! empty( $contact_email ) ) {
 				add_post_meta( $new_post_id, 'Contact email', $contact_email );
 			}
+
+			do_action( 'pcf_process_after_insert_post', $new_post_id);
 		}
 
 		// Should the user get redirected?
@@ -479,10 +503,9 @@ IP search: http://whatismyipaddress.com/ip/$contact_ip \n\n";
 			$redirect = $_SERVER["HTTP_REFERER"] . ( strpos( $_SERVER["HTTP_REFERER"], '?' ) === FALSE ? '?' : '&' ) . 'pcf=1';
 		}
 
+		$redirect = apply_filters( 'pcf_process_redirect', $redirect );
 		wp_safe_redirect( $redirect );
-
 	}
-
 }
 
 // Get a settings value

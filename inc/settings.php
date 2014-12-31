@@ -14,92 +14,92 @@
 function proper_contact_plugin_options() {
 	return array(
 		'head1'                          => array(
-			'Fields to show',
+			__( 'Fields to show', 'proper-contact' ),
 			'',
 			'title',
 			'',
 		),
 		'propercfp_name_field'           => array(
-			'Name',
-			'Should a name field be displayed?',
+			__( 'Name', 'proper-contact' ),
+			__( 'Should a name field be displayed?', 'proper-contact' ),
 			'select',
 			'yes',
 			array(
-				''    => 'None',
-				'yes' => 'Yes but not required',
-				'req' => 'Required'
+				''    => __( 'None', 'proper-contact' ),
+				'yes' => __( 'Yes but not required', 'proper-contact' ),
+				'req' => __( 'Required', 'proper-contact' )
 			),
 		),
 		'propercfp_email_field'          => array(
-			'Email address',
-			'Should an email address field be displayed?',
+			__( 'Email address', 'proper-contact' ),
+			__( 'Should an email address field be displayed?', 'proper-contact' ),
 			'select',
 			'yes',
 			array(
-				''    => 'None',
-				'yes' => 'Yes but not required',
-				'req' => 'Required'
+				''    => __( 'None', 'proper-contact' ),
+				'yes' => __( 'Yes but not required', 'proper-contact' ),
+				'req' => __( 'Required', 'proper-contact' )
 			),
 		),
 		'propercfp_phone_field'          => array(
-			'Phone number',
-			'Should a phone number field be displayed?',
+			__( 'Phone number', 'proper-contact' ),
+			__( 'Should a phone number field be displayed?', 'proper-contact' ),
 			'select',
 			'yes',
 			array(
-				''    => 'None',
-				'yes' => 'Yes but not required',
-				'req' => 'Required'
+				''    => __( 'None', 'proper-contact' ),
+				'yes' => __( 'Yes but not required', 'proper-contact' ),
+				'req' => __( 'Required', 'proper-contact' )
 			),
 		),
 		'propercfp_reason'               => array(
-			'"Reason for contacting" options',
-			'You can have people choose the reason for their contact from a drop-down list. If you would like this option to appear, enter the different reasons into the text box below, each one on its own line.',
+			__( '"Reason for contacting" options', 'proper-contact' ),
+			__( 'You can have people choose the reason for their contact from a drop-down list. If you would like this option to appear, enter the different reasons into the text box below, each one on its own line.', 'proper-contact' ),
 			'textarea',
 			'',
 		),
 		'propercfp_captcha_field'        => array(
-			'Add a math CAPTCHA',
-			'Checking this box will add a math CAPTCHA to the form to discourage spam',
+			__( 'Add a math CAPTCHA', 'proper-contact' ),
+			__( 'Checking this box will add a math CAPTCHA to the form to discourage spam', 'proper-contact' ),
 			'checkbox',
 			'',
 		),
 		'head2'                          => array(
-			'Form processing options',
+			__( 'Form processing options', 'proper-contact' ),
 			'',
 			'title',
 			'',
 		),
 		'propercfp_email'                => array(
-			'Contact notification sender email',
-			'Email to use for the sender of the contact form emails both to the recipients below and the contact form submitter (if this is activated below). The domain for this email address should match your site\'s domain.',
+			__( 'Contact notification sender email', 'proper-contact' ),
+			__( 'Email to use for the sender of the contact form emails both to the recipients below and the contact form submitter (if this is activated below). The domain for this email address should match your site\'s domain.', 'proper-contact' ),
 			'email',
 			get_bloginfo( 'admin_email' )
 		),
 		'propercfp_reply_to_admin'       => array(
-			'Use the email address above as notification sender',
-			'When this is on, the notification emails sent from your site will come from the email address above. When this is off, the emails will come from the form submitter, making it easy to reply. If you are not receiving notifications from the site, then turn this option off as your email server might be marking them as spam.',
+			__( 'Use the email address above as notification sender', 'proper-contact' ),
+			__( 'When this is on, the notification emails sent from your site will come from the email address above. When this is off, the emails will come from the form submitter, making it easy to reply. If you are not receiving notifications from the site, then turn this option off as your email server might be marking them as spam.', 'proper-contact' ),
 			'checkbox',
 			'',
 		),
 		'propercfp_email_recipients' => array(
-			'Contact submission recipients',
-			'Email address(es) to receive contact submission notifications. You can separate multiple emails with a comma.',
+			__( 'Contact submission recipients', 'proper-contact' ),
+			__( 'Email address(es) to receive contact submission notifications. You can separate multiple emails with a comma.', 'proper-contact' ),
 			'text',
 			proper_contact_get_key( 'propercfp_email' ) ?
 				proper_contact_get_key( 'propercfp_email' ) :
 				get_bloginfo( 'admin_email' )
 		),
 		'propercfp_result_url'           => array(
-			'"Thank You" URL',
-			'Select the post-submit page for all forms submitted',
+			__( '"Thank You" URL', 'proper-contact' ),
+			__( 'Select the post-submit page for all forms submitted', 'proper-contact' ),
 			'select',
 			'',
 			proper_get_content_array()
 		),
 		'propercfp_css'                  => array(
-			'Add styles to the site',
-			'Checking this box will add styles to the form. By default, this is off so you can add your own styles.',
+			__( 'Add styles to the site', 'proper-contact' ),
+			__( 'Checking this box will add styles to the form. By default, this is off so you can add your own styles.', 'proper-contact' ),
 			'checkbox',
 			'',
 		),
@@ -110,14 +110,14 @@ function proper_contact_plugin_options() {
 			'',
 		),
 		'propercfp_blacklist'            => array(
-			'Use the comments blacklist to restrict submissions',
-			'Should form submission IP and email addresses be compared against the Comment Blacklist, found in <strong>wp-admin > Settings > Discussion > Comment Blacklist?</strong>',
+			__( 'Use the comments blacklist to restrict submissions', 'proper-contact' ),
+			__( 'Should form submission IP and email addresses be compared against the Comment Blacklist, found in <strong>wp-admin > Settings > Discussion > Comment Blacklist?</strong>', 'proper-contact' ),
 			'checkbox',
 			'yes',
 		),
 		'propercfp_confirm_email'        => array(
-			'Send email confirmation to form submitter',
-			'Adding text here will send an email to the form submitter. The email uses the "Text to show when form is submitted..." field below as the subject line. Plain text only here, no HTML.',
+			__( 'Send email confirmation to form submitter', 'proper-contact' ),
+			__( 'Adding text here will send an email to the form submitter. The email uses the "Text to show when form is submitted..." field below as the subject line. Plain text only here, no HTML.', 'proper-contact' ),
 			'textarea',
 			'',
 		),
@@ -128,101 +128,101 @@ function proper_contact_plugin_options() {
 			'',
 		),
 		'propercfp_label_name'           => array(
-			'Name field label',
+			__( 'Name field label', 'proper-contact' ),
 			'',
 			'text',
-			'Your full name'
+			__( 'Your full name', 'proper-contact' )
 		),
 		'propercfp_label_email'          => array(
-			'Email field label',
+			__( 'Email field label', 'proper-contact' ),
 			'',
 			'text',
-			'Your email address'
+			__( 'Your email address', 'proper-contact' )
 		),
 		'propercfp_label_phone'          => array(
-			'Phone field label',
+			__( 'Phone field label', 'proper-contact' ),
 			'',
 			'text',
-			'Your phone number'
+			__( 'Your phone number', 'proper-contact' )
 		),
 		'propercfp_label_reason'         => array(
-			'Reason for contacting label',
+			__( 'Reason for contacting label', 'proper-contact' ),
 			'',
 			'text',
-			'Reason for contacting'
+			__( 'Reason for contacting', 'proper-contact' )
 		),
 		'propercfp_label_comment'        => array(
-			'Comment field label',
+			__( 'Comment field label', 'proper-contact' ),
 			'',
 			'text',
-			'Question or comment'
+			__( 'Question or comment', 'proper-contact' )
 		),
 		'propercfp_label_math'           => array(
-			'Math CAPTCHA label',
+			__( 'Math CAPTCHA label', 'proper-contact' ),
 			'',
 			'text',
-			'Solve this equation: '
+			__( 'Solve this equation: ', 'proper-contact' )
 		),
 		'propercfp_label_submit_btn'     => array(
-			'Submit button text',
+			__( 'Submit button text', 'proper-contact' ),
 			'',
 			'text',
-			'Submit'
+			__( 'Submit', 'proper-contact' )
 		),
 		'propercfp_label_submit'         => array(
-			'Successful form submission text',
-			'This text is used on the page if no "Thank You" URL is set above. This is also used as the confirmation email title, if one is set to send out.',
+			__( 'Successful form submission text', 'proper-contact' ),
+			__( 'This text is used on the page if no "Thank You" URL is set above. This is also used as the confirmation email title, if one is set to send out.', 'proper-contact' ),
 			'text',
-			'Thank you for your contact!'
+			__( 'Thank you for your contact!', 'proper-contact' )
 		),
 		'head4'                          => array(
-			'HTML5 validation',
+			__( 'HTML5 validation', 'proper-contact' ),
 			'',
 			'',
 			'title',
 			'',
 		),
 		'propercfp_html5_no_validate'    => array(
-			'Use HTML5 validation',
+			__( 'Use HTML5 validation', 'proper-contact' ),
 			'',
 			'checkbox',
 			'yes'
 		),
 		'head5'                          => array(
-			'Error Messages',
+			__( 'Error Messages', 'proper-contact' ),
 			'',
 			'title',
 			'',
 		),
 		'propercfp_label_err_name'       => array(
-			'Name required and missing',
+			__( 'Name required and missing', 'proper-contact' ),
 			'',
 			'text',
-			'Enter your name'
+			__( 'Enter your name', 'proper-contact' )
 		),
 		'propercfp_label_err_email'      => array(
 			'E-mail required and missing',
 			'',
 			'text',
-			'Enter a valid email'
+			__( 'Enter a valid email', 'proper-contact' )
 		),
 		'propercfp_label_err_phone'      => array(
-			'EPhone required and missing',
+			__( 'Phone required and missing', 'proper-contact' ),
 			'',
 			'text',
-			'Please enter a phone number'
+			__( 'Please enter a phone number', 'proper-contact' )
 		),
 		'propercfp_label_err_no_content' => array(
-			'Question/comment is missing',
+			__( 'Question/comment is missing', 'proper-contact' ),
 			'',
 			'text',
-			'Enter your question or comment'
+			__( 'Enter your question or comment', 'proper-contact' )
 		),
 		'propercfp_label_err_captcha'    => array(
-			'Incorrect math CAPTCHA',
+			__( 'Incorrect math CAPTCHA', 'proper-contact' ),
 			'',
 			'text',
-			'Check your math ...'
+			__( 'Check your math ...', 'proper-contact' )
 		),
 	);
 }
@@ -268,7 +268,8 @@ function cfp_add_admin() {
 		__( 'PROPER Contact', 'proper-contact' ),
 		'manage_options',
 		'pcfp-admin',
-		'proper_contact_admin' );
+		'proper_contact_admin'
+	);
 
 }
 
@@ -294,10 +295,10 @@ function proper_contact_admin() {
 
 	<div class="postbox" style="margin-top: 20px; padding: 0 20px">
 
-		<p>Simply configure the form below, save your changes, then add
-			<code>[proper_contact_form]</code> to any page or post. You can also add a
-			<a href="<?php echo admin_url( 'widgets.php' ); ?>">widget</a>.<br>
-			If you're adding this to a theme file, add
+		<p><?php _e( 'Simply configure the form below, save your changes, then add', 'proper-contact' ) ?>
+			<code>[proper_contact_form]</code> <?php _e( 'to any page or post. You can also add a', 'proper-contact' ) ?>
+			<a href="<?php echo admin_url( 'widgets.php' ); ?>"><?php _e( 'widget', 'proper-contact' ) ?></a>.<br>
+			<?php _e( 'If you are adding this to a theme file, add', 'proper-contact' ) ?>
 			<code>&lt;?php echo do_shortcode( '[proper_contact_form]' ) ?&gt;</code>
 		</p>
 
@@ -329,6 +330,7 @@ function proper_contact_admin() {
 		<p><strong>Premium Themes and Plugins:</strong></p>
 		<ul>
 			<li><a href="http://wpdrudge.com/?ref=pcf-settings" target="_blank">WP-Drudge curation theme</a></li>
+			<li><a href="http://rankitwp.com/?ref=pcf-settings" target="_blank">Rank It WP community curation theme</a></li>
 			<li><a href="http://www.wpwritersblock.com/?ref=pcf-settings" target="_blank">WP Writer's Block writer's theme</a></li>
 			<li><a href="http://theproperweb.com/product/google-news-wordpress/?ref=pcf-settings" target="_blank">Google News for WordPress</a></li>
 		</ul>
@@ -358,7 +360,7 @@ function proper_contact_admin() {
 	<table class="form-table">
 	<tr>
 		<td>
-			<p><input name="save" type="submit" value="Save changes" class="button-primary"></p>
+			<p><input name="save" type="submit" value="<?php _e( 'Save changes', 'proper-contact' ) ?>" class="button-primary"></p>
 		</td>
 	</tr>
 
@@ -393,9 +395,9 @@ function proper_contact_admin() {
 			?>
 			<tr>
 				<td colspan="2">
-					<h4><?php _e( $opt_name, 'proper-contact' ) ?></h4>
+					<h4><?php echo $opt_name ?></h4>
 
-					<p class="option_desc"><?php _e( $opt_desc, 'proper-contact' ) ?></p>
+					<p class="option_desc"><?php echo $opt_desc ?></p>
 				</td>
 			</tr>
 		<?php
@@ -407,7 +409,7 @@ function proper_contact_admin() {
 			<tr>
 				<th colspan="2" scope="row">
 					<hr>
-					<h3 class="title"><?php _e( $opt_name, 'proper-contact' ) ?></h3>
+					<h3 class="title"><?php echo $opt_name ?></h3>
 				</th>
 			</tr>
 
@@ -419,12 +421,12 @@ function proper_contact_admin() {
 
 			<tr>
 				<th scope="row">
-					<label for="<?php echo $opt_id ?>"><?php _e( $opt_name, 'proper-contact' ) ?>:</label>
+					<label for="<?php echo $opt_id ?>"><?php echo $opt_name ?>:</label>
 				</th>
 				<td>
 					<input name="<?php echo $opt_id ?>" id="<?php echo $opt_id ?>" type="<?php echo $opt_type ?>" value="<?php echo stripslashes( $opt_val ) ?>" class="widefat">
 
-					<p class="description"><?php _e( $opt_desc, 'proper-contact' ) ?></p>
+					<p class="description"><?php echo $opt_desc ?></p>
 
 				</td>
 			</tr>
@@ -437,7 +439,7 @@ function proper_contact_admin() {
 
 			<tr>
 				<th scope="row">
-					<label for="<?php echo $opt_id ?>"><?php _e( $opt_name, 'proper-contact' ) ?>:</label>
+					<label for="<?php echo $opt_id ?>"><?php echo $opt_name ?>:</label>
 				</th>
 				<td>
 					<select name="<?php echo $opt_id ?>" id="<?php echo $opt_id ?>">
@@ -452,7 +454,7 @@ function proper_contact_admin() {
 						<?php endforeach; ?>
 					</select>
 
-					<p class="description"><?php _e( $opt_desc, 'proper-contact' ) ?></p>
+					<p class="description"><?php echo $opt_desc ?></p>
 				</td>
 			</tr>
 
@@ -464,7 +466,7 @@ function proper_contact_admin() {
 
 			<tr>
 				<th scope="row">
-					<span><?php _e( $opt_name, 'proper-contact' ) ?>:</span>
+					<span><?php echo $opt_name ?>:</span>
 				</th>
 				<td>
 
@@ -479,7 +481,7 @@ function proper_contact_admin() {
 						<input type="radio" value="<?php echo $val ?>" name="<?php echo $opt_id ?>" id="<?php echo $opt_id . '_' . $val; ?>" <?php echo $checked ?>>
 						<label for="<?php echo $opt_id . $val; ?>"><?php echo $val ?></label><br>
 
-						<p class="description"><?php _e( $opt_desc, 'proper-contact' ) ?></p>
+						<p class="description"><?php echo $opt_desc ?></p>
 
 					<?php endforeach; ?>
 				</td>
@@ -493,7 +495,7 @@ function proper_contact_admin() {
 
 			<tr>
 				<th scope="row">
-					<span><?php _e( $opt_name, 'proper-contact' ) ?>:</span>
+					<span><?php echo $opt_name ?>:</span>
 				</th>
 				<td>
 					<?php
@@ -524,7 +526,7 @@ function proper_contact_admin() {
 						<label for="<?php echo $opt_id ?>">Yes</label>
 
 					<?php endif; ?>
-					<p class="description"><?php _e( $opt_desc, 'proper-contact' ) ?></p>
+					<p class="description"><?php echo $opt_desc?></p>
 				</td>
 			</tr>
 
@@ -535,12 +537,12 @@ function proper_contact_admin() {
 			?>
 			<tr>
 				<th scope="row">
-					<label for="<?php echo $opt_id ?>"><?php _e( $opt_name, 'proper-contact' ) ?>:</label>
+					<label for="<?php echo $opt_id ?>"><?php echo $opt_name ?>:</label>
 				</th>
 				<td>
 					<textarea rows="6" cols="60" name="<?php echo $opt_id ?>" id="<?php echo $opt_id ?>" class="large-text"><?php echo stripslashes( $opt_val ) ?></textarea>
 
-					<p class="description"><?php _e( $opt_desc, 'proper-contact' ) ?></p>
+					<p class="description"><?php echo $opt_desc ?></p>
 				</td>
 			</tr>
 
