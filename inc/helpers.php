@@ -53,7 +53,7 @@ if ( ! function_exists( 'proper_display_errors' ) ) {
 	function proper_display_errors( $errs ) {
 		$output = '
 	<div class="proper_error_box">
-		<h6>'. __( 'Please correct the following errors', 'proper-contact' ) . ':</h6>
+		<p><strong>'. __( 'Please correct the following errors', 'proper-contact' ) . ':</strong></p>
 		<ul>';
 
 		foreach ( $errs as $err ) :

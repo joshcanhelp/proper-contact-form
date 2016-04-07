@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROPER Contact Form\n"
-"POT-Creation-Date: 2014-12-31 11:39-0800\n"
-"PO-Revision-Date: 2014-12-31 11:39-0800\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2016-04-07 11:06-0800\n"
+"PO-Revision-Date: 2016-04-07 11:06-0800\n"
+"Last-Translator: Josh Cunningham <josh@joshcanhelp.com>\n"
 "Language-Team: \n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.7.1\n"
+"X-Generator: Poedit 1.7.6\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
@@ -151,226 +151,259 @@ msgid ""
 msgstr ""
 
 #: inc/settings.php:119
-msgid "Send email confirmation to form submitter"
+msgid "Add a nonce to the contact form"
 msgstr ""
 
 #: inc/settings.php:120
+msgid ""
+"Should the form use a WordPress nonce? This helps reduce spam by ensuring "
+"that the form submittor is on the site when submitting the form rather than "
+"submitting remotely. This could, however, cause problems with sites using a "
+"page caching plugin. Turn this off if you are getting complaints about forms "
+"not being able to be submitted with an error of \"Nonce failed!\""
+msgstr ""
+
+#: inc/settings.php:125
+msgid "Send email confirmation to form submitter"
+msgstr ""
+
+#: inc/settings.php:126
 msgid ""
 "Adding text here will send an email to the form submitter. The email uses "
 "the \"Text to show when form is submitted...\" field below as the subject "
 "line. Plain text only here, no HTML."
 msgstr ""
 
-#: inc/settings.php:131
+#: inc/settings.php:137
 msgid "Name field label"
 msgstr ""
 
-#: inc/settings.php:134
+#: inc/settings.php:140
 msgid "Your full name"
 msgstr ""
 
-#: inc/settings.php:137
+#: inc/settings.php:143
 msgid "Email field label"
 msgstr ""
 
-#: inc/settings.php:140
+#: inc/settings.php:146
 msgid "Your email address"
 msgstr ""
 
-#: inc/settings.php:143
+#: inc/settings.php:149
 msgid "Phone field label"
 msgstr ""
 
-#: inc/settings.php:146
+#: inc/settings.php:152
 msgid "Your phone number"
 msgstr ""
 
-#: inc/settings.php:149
+#: inc/settings.php:155
 msgid "Reason for contacting label"
 msgstr ""
 
-#: inc/settings.php:152
+#: inc/settings.php:158
 msgid "Reason for contacting"
 msgstr ""
 
-#: inc/settings.php:155
+#: inc/settings.php:161
 msgid "Comment field label"
 msgstr ""
 
-#: inc/settings.php:158
+#: inc/settings.php:164
 msgid "Question or comment"
 msgstr ""
 
-#: inc/settings.php:161
+#: inc/settings.php:167
 msgid "Math CAPTCHA label"
 msgstr ""
 
-#: inc/settings.php:164
+#: inc/settings.php:170
 msgid "Solve this equation: "
 msgstr ""
 
-#: inc/settings.php:167
+#: inc/settings.php:173
 msgid "Submit button text"
 msgstr ""
 
-#: inc/settings.php:170
+#: inc/settings.php:176
 msgid "Submit"
 msgstr ""
 
-#: inc/settings.php:173
+#: inc/settings.php:179
 msgid "Successful form submission text"
 msgstr ""
 
-#: inc/settings.php:174
+#: inc/settings.php:180
 msgid ""
 "This text is used on the page if no \"Thank You\" URL is set above. This is "
 "also used as the confirmation email title, if one is set to send out."
 msgstr ""
 
-#: inc/settings.php:176
+#: inc/settings.php:182
 msgid "Thank you for your contact!"
 msgstr ""
 
-#: inc/settings.php:179
+#: inc/settings.php:185
 msgid "HTML5 validation"
 msgstr ""
 
-#: inc/settings.php:186
+#: inc/settings.php:192
 msgid "Use HTML5 validation"
 msgstr ""
 
-#: inc/settings.php:192
+#: inc/settings.php:198
 msgid "Error Messages"
 msgstr ""
 
-#: inc/settings.php:198
+#: inc/settings.php:204
 msgid "Name required and missing"
 msgstr ""
 
-#: inc/settings.php:201
+#: inc/settings.php:207
 msgid "Enter your name"
 msgstr ""
 
-#: inc/settings.php:207
+#: inc/settings.php:213
 msgid "Enter a valid email"
 msgstr ""
 
-#: inc/settings.php:210
+#: inc/settings.php:216
 msgid "Phone required and missing"
 msgstr ""
 
-#: inc/settings.php:213
+#: inc/settings.php:219
 msgid "Please enter a phone number"
 msgstr ""
 
-#: inc/settings.php:216
+#: inc/settings.php:222
 msgid "Question/comment is missing"
 msgstr ""
 
-#: inc/settings.php:219
+#: inc/settings.php:225
 msgid "Enter your question or comment"
 msgstr ""
 
-#: inc/settings.php:222
+#: inc/settings.php:228
 msgid "Incorrect math CAPTCHA"
 msgstr ""
 
-#: inc/settings.php:225
+#: inc/settings.php:231
 msgid "Check your math ..."
 msgstr ""
 
-#: inc/settings.php:267
+#: inc/settings.php:273
 msgid "PROPER Contact settings"
 msgstr ""
 
-#: inc/settings.php:268
+#: inc/settings.php:274
 msgid "PROPER Contact"
 msgstr ""
 
-#: inc/settings.php:291 inc/settings.php:310
+#: inc/settings.php:297 inc/settings.php:316 inc/widget.php:25
 msgid "PROPER Contact Form"
 msgstr ""
 
-#: inc/settings.php:293 inc/settings.php:598
+#: inc/settings.php:299 inc/settings.php:605
 msgid "Settings"
 msgstr ""
 
-#: inc/settings.php:298
+#: inc/settings.php:304
 msgid "Simply configure the form below, save your changes, then add"
 msgstr ""
 
-#: inc/settings.php:299
+#: inc/settings.php:305
 msgid "to any page or post. You can also add a"
 msgstr ""
 
-#: inc/settings.php:300
+#: inc/settings.php:306
 msgid "widget"
 msgstr ""
 
-#: inc/settings.php:301
+#: inc/settings.php:307
 msgid "If you are adding this to a theme file, add"
 msgstr ""
 
-#: inc/settings.php:311
+#: inc/settings.php:317
 msgid "settings saved."
 msgstr ""
 
-#: inc/settings.php:362 inc/settings.php:556
+#: inc/settings.php:369 inc/settings.php:563
 msgid "Save changes"
 msgstr ""
 
-#: proper-contact-form.php:290
+#: inc/widget.php:28
+msgid "Outputs a contact form"
+msgstr ""
+
+#: inc/widget.php:34
+msgid "Title"
+msgstr ""
+
+#: inc/widget.php:41
+msgid "Text above form"
+msgstr ""
+
+#: proper-contact-form.php:157
+msgid "Select one..."
+msgstr ""
+
+#: proper-contact-form.php:307
 msgid "Nonce failed!"
 msgstr ""
 
-#: proper-contact-form.php:296
+#: proper-contact-form.php:316
 msgid "Form submission failed!"
 msgstr ""
 
-#: proper-contact-form.php:302
+#: proper-contact-form.php:323
 msgid "Contact form submission on"
 msgstr ""
 
-#: proper-contact-form.php:334 proper-contact-form.php:351
+#: proper-contact-form.php:358 proper-contact-form.php:374
 msgid "Google it"
 msgstr ""
 
-#: proper-contact-form.php:528 proper-contact-form.php:538
+#: proper-contact-form.php:483
+msgid "[None given]"
+msgstr ""
+
+#: proper-contact-form.php:580 proper-contact-form.php:593
 msgid "Contacts"
 msgstr ""
 
-#: proper-contact-form.php:529
+#: proper-contact-form.php:582
 msgid "Contact"
 msgstr ""
 
-#: proper-contact-form.php:530
+#: proper-contact-form.php:584
 msgid "Add Contact"
 msgstr ""
 
-#: proper-contact-form.php:531
+#: proper-contact-form.php:586
 msgid "Add New Contact"
 msgstr ""
 
-#: proper-contact-form.php:532
+#: proper-contact-form.php:587
 msgid "Edit Contact"
 msgstr ""
 
-#: proper-contact-form.php:533
+#: proper-contact-form.php:588
 msgid "New Contact"
 msgstr ""
 
-#: proper-contact-form.php:534
+#: proper-contact-form.php:589
 msgid "All Contacts"
 msgstr ""
 
-#: proper-contact-form.php:535
+#: proper-contact-form.php:590
 msgid "View Contact"
 msgstr ""
 
-#: proper-contact-form.php:536
+#: proper-contact-form.php:591
 msgid "No Contacts found"
 msgstr ""
 
-#: proper-contact-form.php:537
+#: proper-contact-form.php:592
 msgid "No Contacts found in Trash"
 msgstr ""

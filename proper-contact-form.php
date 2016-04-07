@@ -209,6 +209,7 @@ function proper_contact_form () {
 			stripslashes( sanitize_text_field( proper_contact_get_key( 'propercfp_label_math' ) ) ) .
 			" $num_1 + $num_2",
 			array(
+				'type'         => 'number',
 				'required'         => TRUE,
 				'wrap_class'       => $wrap_classes,
 				'request_populate' => FALSE
