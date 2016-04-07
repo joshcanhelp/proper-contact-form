@@ -115,6 +115,12 @@ function proper_contact_plugin_options() {
 			'checkbox',
 			'yes',
 		),
+		'propercfp_nonce'            => array(
+			__( 'Add a nonce to the contact form', 'proper-contact' ),
+			__( 'Should the form use a WordPress nonce? This helps reduce spam by ensuring that the form submittor is on the site when submitting the form rather than submitting remotely. This could, however, cause problems with sites using a page caching plugin. Turn this off if you are getting complaints about forms not being able to be submitted with an error of "Nonce failed!"', 'proper-contact' ),
+			'checkbox',
+			'yes',
+		),
 		'propercfp_confirm_email'        => array(
 			__( 'Send email confirmation to form submitter', 'proper-contact' ),
 			__( 'Adding text here will send an email to the form submitter. The email uses the "Text to show when form is submitted..." field below as the subject line. Plain text only here, no HTML.', 'proper-contact' ),

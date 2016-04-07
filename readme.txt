@@ -1,12 +1,12 @@
 === PROPER Contact Form ===
 Contributors: properwp, joshcanhelp
 Donate link: http://theproperweb.com/product/proper-contact-form/
-Tags: contact, contact form, contact form widget
+Tags: contact, contact form, contact form widget, email form, lead generation
 Requires at least: 3.0
-Tested up to: 4.0
-Stable tag: 0.9.8.6
+Tested up to: 4.3
+Stable tag: 1.0
 
-Creates a flexible, secure contact form on your WP site
+Creates a flexible, secure contact form on your WP site that saves contact emails
 
 == Description ==
 
@@ -47,6 +47,11 @@ Activating the Proper Contact Form plugin is just like any other plugin. If you'
 7. To add this form to any page or post, just copy/paste or type "[proper_contact_form]" into the page or post content and save. The form should appear on that page
 
 == Changelog ==
+
+= 1.0.0 =
+* Correct spam blacklist checking
+* Added a setting to remove the nonce on the contact form
+* Fixed the PHP notice caused by incorrect widget loading
 
 = 0.9.8.6 =
 * Fixed the math captcha bug that required page reload

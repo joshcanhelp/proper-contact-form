@@ -18,25 +18,27 @@ class proper_contact_widget extends WP_Widget {
 	/**
 	 *  Widget constructor
 	 */
-	function proper_contact_widget() {
+	function __construct() {
 
-		/* Widget settings. */
-		$widget_ops = array( 'classname'   => __FUNCTION__,
-												 'description' => 'Outputs a contact form' );
-
-		/* Create the widget. */
-		$this->WP_Widget( 'proper_contact_widget', 'PROPER Contact Form', $widget_ops );
+		parent::__construct(
+			'proper_contact_widget',
+			__( 'PROPER Contact Form', 'proper-contact' ),
+			array(
+				'classname' => 'proper_contact_widget',
+				'description' => __( 'Outputs a contact form', 'proper-contact' ),
+			)
+		);
 
 		$this->widget_fields = array(
 			array(
-				'label'       => 'Title',
+				'label'       => __( 'Title', 'proper-contact' ),
 				'type'        => 'text',
 				'id'          => 'pcf_widget_title',
 				'description' => '',
 				'default'     => ''
 			),
 			array(
-				'label'       => 'Text above form',
+				'label'       => __( 'Text above form', 'proper-contact' ),
 				'type'        => 'textarea',
 				'id'          => 'pcf_widget_subtext',
 				'description' => '',
