@@ -93,3 +93,18 @@ if ( ! function_exists( 'proper_get_blacklist' ) ) {
 		return $final_blocked_arr;
 	}
 }
+
+// Get blacklist IPs and emails from the Discussion settings
+if ( ! function_exists( 'proper_prepare_label' ) ) {
+	function proper_prepare_label( $key ) {
+
+		$label_text = proper_contact_get_key( $key );
+
+		if ( ! empty( $label_text ) ) {
+			$label_text = sanitize_text_field( $label_text );
+			$label_text = stripslashes( $label_text );
+		}
+
+		return $label_text;
+	}
+}

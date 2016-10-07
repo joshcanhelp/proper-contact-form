@@ -52,6 +52,17 @@ function proper_contact_plugin_options() {
 				'req' => __( 'Required', 'proper-contact' )
 			),
 		),
+		'propercfp_comment_field'          => array(
+			__( 'Comment/question field', 'proper-contact' ),
+			__( 'Should a comment/question number field be displayed?', 'proper-contact' ),
+			'select',
+			'req',
+			array(
+				''    => __( 'None', 'proper-contact' ),
+				'yes' => __( 'Yes but not required', 'proper-contact' ),
+				'req' => __( 'Required', 'proper-contact' )
+			),
+		),
 		'propercfp_reason'               => array(
 			__( '"Reason for contacting" options', 'proper-contact' ),
 			__( 'You can have people choose the reason for their contact from a drop-down list. If you would like this option to appear, enter the different reasons into the text box below, each one on its own line.', 'proper-contact' ),

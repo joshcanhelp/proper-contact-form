@@ -50,6 +50,11 @@ Activating the Proper Contact Form plugin is just like any other plugin. If you'
 
 = 1.1.0 =
 * Fixed deprecated get_currentuserinfo()
+* Moved shortcode declaration to separate file; minor refactor and additional comments
+* Added pcf_field_form_after_name action
+* Added pcf_field_form_after_email action
+* Added pcf_field_form_after_phone action
+* Made comment textarea field optional, like name and email and phone
 
 = 1.0.0 =
 * Adjusted styling on form when styles are active

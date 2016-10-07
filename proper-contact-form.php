@@ -20,10 +20,13 @@ if ( ! function_exists( 'add_action' ) ) {
 // Important constants
 define( 'PROPER_CONTACT_VERSION', '1.1.0' );
 define( 'PROPER_CONTACT_URL', plugin_dir_url( __FILE__ ) );
+define( 'PROPER_CONTACT_INC_PATH', plugin_dir_path( __FILE__ ) );
+define( 'PROPER_CONTACT_CACHE_GROUP', 'proper_contact' );
 
 // Required helper functions
 include_once( dirname( __FILE__ ) . '/inc/helpers.php' );
 include_once( dirname( __FILE__ ) . '/inc/settings.php' );
+include_once( dirname( __FILE__ ) . '/inc/form-shortcode.php' );
 include_once( dirname( __FILE__ ) . '/inc/widget.php' );
 
 /**
@@ -37,255 +40,9 @@ function proper_contact_action_init () {
 
 add_action( 'init', 'proper_contact_action_init' );
 
-/**
- * Outputs the contact form or a confirmation message is submitted
- *
- * @return string
- */
 
-function proper_contact_form () {
 
-	// Looking for a submitted form if not redirect
-	if ( isset( $_GET['pcf'] ) && $_GET['pcf'] == 1 ) {
 
-		return apply_filters( 'pcf_form_submitted_text', '<div class="proper_contact_thankyou_wrap">
-			<h2>' . sanitize_text_field( proper_contact_get_key( 'propercfp_label_submit' ) ) . '</h2>
-		</div>' );
-	}
-
-	// FormBuilder
-	// https://github.com/joshcanhelp/php-form-builder
-	if ( ! class_exists( 'PhpFormBuilder' ) ) {
-		require_once( dirname( __FILE__ ) . '/inc/PhpFormBuilder.php' );
-	}
-
-	$form = new PhpFormBuilder();
-
-	// TODO: make a better ID system
-	$form->set_att( 'id', 'proper_contact_form_' . ( get_the_id() ? get_the_id() : 1 ) );
-	$form->set_att( 'class', array( 'proper_contact_form' ) );
-
-	if ( 'yes' === proper_contact_get_key( 'propercfp_nonce' ) ) {
-		$form->set_att( 'add_nonce', 'proper_cfp_nonce' );
-	}
-
-	if ( ! proper_contact_get_key( 'propercfp_html5_no_validate' ) ) {
-		$form->set_att( 'novalidate', TRUE );
-	}
-
-	do_action( 'pcf_field_form_start', $form );
-
-	// Add name field if selected on the settings page
-	$propercfp_name_field = proper_contact_get_key( 'propercfp_name_field' );
-
-	if ( $propercfp_name_field ) {
-		$required     = $propercfp_name_field === 'req' ? TRUE : FALSE;
-		$wrap_classes = array( 'form_field_wrap', 'contact_name_wrap' );
-
-		// If this field was submitted with invalid data
-		if ( isset( $_SESSION['cfp_contact_errors']['contact-name'] ) ) {
-			$wrap_classes[] = 'error';
-		}
-
-		// Build the input with the correct label, options, and name
-		$form->add_input(
-			stripslashes( sanitize_text_field( proper_contact_get_key( 'propercfp_label_name' ) ) ),
-			array(
-				'required'   => $required,
-				'wrap_class' => $wrap_classes
-			),
-			'contact-name'
-		);
-
-	}
-
-	// Add email field if selected on the settings page
-	$propercfp_email_field = proper_contact_get_key( 'propercfp_email_field' );
-
-	if ( $propercfp_email_field ) {
-		$required     = $propercfp_email_field === 'req' ? TRUE : FALSE;
-		$wrap_classes = array( 'form_field_wrap', 'contact_email_wrap' );
-
-		// If this field was submitted with invalid data
-		if ( isset( $_SESSION['cfp_contact_errors']['contact-email'] ) ) {
-			$wrap_classes[] = 'error';
-		}
-
-		// Build the input with the correct label, options, and name
-		$form->add_input(
-			stripslashes( sanitize_text_field( proper_contact_get_key( 'propercfp_label_email' ) ) ),
-			array(
-				'required'   => $required,
-				'type'       => 'email',
-				'wrap_class' => $wrap_classes
-			),
-			'contact-email'
-		);
-
-	}
-
-	// Add phone field if selected on the settings page
-	$propercfp_phone_field = proper_contact_get_key( 'propercfp_phone_field' );
-
-	if ( $propercfp_phone_field ) {
-		$required     = $propercfp_phone_field === 'req' ? TRUE : FALSE;
-		$wrap_classes = array( 'form_field_wrap', 'contact_phone_wrap' );
-
-		// If this field was submitted with invalid data
-		if ( isset( $_SESSION['cfp_contact_errors']['contact-phone'] ) ) {
-			$wrap_classes[] = 'error';
-		}
-
-		// Build the input with the correct label, options, and name
-		$form->add_input(
-			stripslashes( sanitize_text_field( proper_contact_get_key( 'propercfp_label_phone' ) ) ),
-			array(
-				'required'   => $required,
-				'wrap_class' => $wrap_classes
-			),
-			'contact-phone'
-		);
-	}
-
-	// Add reasons drop-down if any have been entered
-	$options = proper_get_textarea_opts( trim( proper_contact_get_key( 'propercfp_reason' ) ) );
-	if ( ! empty( $options ) ) {
-
-		// Prepare the options array
-		$options = array_map( 'trim', $options );
-		$options = array_map( 'sanitize_text_field', $options );
-		array_unshift( $options, __( 'Select one...', 'proper-contact' ) );
-
-		// Build the select with the correct label, options, and name
-		$form->add_input(
-			stripslashes( sanitize_text_field( proper_contact_get_key( 'propercfp_label_reason' ) ) ),
-			array(
-				'type'       => 'select',
-				'wrap_class' => array(
-					'form_field_wrap',
-					'contact_reasons_wrap'
-				),
-				'options'    => $options
-			),
-			'contact-reasons'
-		);
-	}
-
-	do_action( 'pcf_field_above_comment', $form );
-
-	// Comment field, required to be displayed
-	$wrap_classes = array( 'form_field_wrap', 'question_or_comment_wrap' );
-	if ( isset( $_SESSION['cfp_contact_errors']['question-or-comment'] ) ) {
-		$wrap_classes[] = 'error';
-	}
-	$form->add_input(
-		stripslashes( proper_contact_get_key( 'propercfp_label_comment' ) ),
-		array(
-			'required'   => TRUE,
-			'type'       => 'textarea',
-			'wrap_class' => $wrap_classes
-		),
-		'question-or-comment'
-	);
-
-	do_action( 'pcf_field_below_comment', $form );
-
-	// Add a math CAPTCHA, if desired
-	if ( proper_contact_get_key( 'propercfp_captcha_field' ) ) {
-
-		$wrap_classes = array( 'form_field_wrap', 'math_captcha_wrap' );
-
-		// If this field was submitted with invalid data
-		if ( isset( $_SESSION['cfp_contact_errors']['math-captcha'] ) ) {
-			$wrap_classes[] = 'error';
-		}
-
-		$num_1 = mt_rand( 1, 10 );
-		$num_2 = mt_rand( 1, 10 );
-		$sum   = $num_1 + $num_2;
-
-		// Build the input with the correct label, options, and name
-		$form->add_input(
-			stripslashes( sanitize_text_field( proper_contact_get_key( 'propercfp_label_math' ) ) ) .
-			" $num_1 + $num_2",
-			array(
-				'type'         => 'number',
-				'required'         => TRUE,
-				'wrap_class'       => $wrap_classes,
-				'request_populate' => FALSE
-			),
-			'math-captcha'
-		);
-
-		$form->add_input(
-			'Math CAPTCHA sum',
-			array(
-				'type'             => 'hidden',
-				'value'            => $sum,
-				'request_populate' => FALSE
-			),
-			'math-captcha-sum'
-		);
-
-	}
-
-	do_action( 'pcf_field_above_submit', $form );
-
-	// Submit button
-	$submit_btn_text = proper_contact_get_key( 'propercfp_label_submit_btn' );
-	$submit_btn_text = sanitize_text_field( $submit_btn_text );
-	$submit_btn_text = stripslashes( $submit_btn_text );
-
-	$form->add_input(
-		$submit_btn_text,
-		array(
-			'type'       => 'submit',
-			'wrap_class' => array(
-				'form_field_wrap',
-				'submit_wrap'
-			),
-			'value'      => $submit_btn_text
-		),
-		'submit'
-	);
-
-	// Referring site or page, if any
-	if ( ! empty( $_SERVER['HTTP_REFERER'] ) ) {
-		$form->add_input(
-			'Contact Referrer',
-			array(
-				'type'  => 'hidden',
-				'value' => $_SERVER['HTTP_REFERER']
-			)
-		);
-	}
-
-	// Referring page, if sent via URL query
-	if ( ! empty( $_REQUEST['src'] ) || ! empty( $_REQUEST['ref'] ) ) {
-		$form->add_input(
-			'Referring page', array(
-				'type'  => 'hidden',
-				'value' => ! empty( $_REQUEST['src'] ) ? $_REQUEST['src'] : $_REQUEST['ref']
-			)
-		);
-	}
-
-	// Are there any submission errors?
-	$errors = '';
-	if ( ! empty( $_SESSION['cfp_contact_errors'] ) ) {
-		$errors = proper_display_errors( $_SESSION['cfp_contact_errors'] );
-		unset( $_SESSION['cfp_contact_errors'] );
-	}
-
-	// Display that beautiful form!
-	return apply_filters( 'pcf_form_final_html', '<div class="proper_contact_form_wrap">
-		' . $errors . '
-		' . $form->build_form( FALSE ) . '
-		</div>' );
-
-}
-
-add_shortcode( 'proper_contact_form', 'proper_contact_form' );
 
 /**
  * Process the incoming contact form data, if any
@@ -391,7 +148,7 @@ function cfp_process_contact () {
 
 	// Sanitize and validate comments
 	$contact_comment = sanitize_text_field( trim( $_POST['question-or-comment'] ) );
-	if ( empty( $contact_comment ) ) {
+	if ( empty( $contact_comment ) && proper_contact_get_key( 'propercfp_comment_field' ) === 'req' ) {
 		$_SESSION['cfp_contact_errors']['question-or-comment'] =
 			sanitize_text_field( proper_contact_get_key( 'propercfp_label_err_no_content' ) );
 	} else {
