@@ -235,8 +235,7 @@ function proper_contact_plugin_options() {
 
 function cfp_add_admin() {
 
-	global $current_user;
-	get_currentuserinfo();
+	$current_user = wp_get_current_user();
 
 	$propercfp_options = get_option( 'propercfp_settings_array' );
 	$plugin_options    = proper_contact_plugin_options();
@@ -284,8 +283,7 @@ add_action( 'admin_menu', 'cfp_add_admin' );
 
 function proper_contact_admin() {
 
-	global $current_user;
-	get_currentuserinfo();
+	$current_user = wp_get_current_user();
 
 	$propercfp_options = get_option( 'propercfp_settings_array' );
 	$plugin_options    = proper_contact_plugin_options();

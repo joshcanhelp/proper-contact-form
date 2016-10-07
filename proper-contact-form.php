@@ -4,7 +4,7 @@
  * Plugin Name: PROPER Contact Form
  * Plugin URI: http://theproperweb.com/product/proper-contact-form/
  * Description: A better contact form processor
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: PROPER Web Development
  * Author URI: http://theproperweb.com
  * Text Domain: proper-contact
@@ -18,7 +18,7 @@ if ( ! function_exists( 'add_action' ) ) {
 }
 
 // Important constants
-define( 'PROPER_CONTACT_VERSION', '0.9.9' );
+define( 'PROPER_CONTACT_VERSION', '1.1.0' );
 define( 'PROPER_CONTACT_URL', plugin_dir_url( __FILE__ ) );
 
 // Required helper functions
